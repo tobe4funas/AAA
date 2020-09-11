@@ -1,0 +1,128 @@
+
+-- Edit Box
+AAAUI.editBox1 = CreateFrame("EditBox", "AAAEditBox", AAAUI, "InputBoxTemplate")
+AAAUI.editBox1:SetSize(35,20)
+AAAUI.editBox1:SetAutoFocus(false)
+AAAUI.editBox1:ClearFocus()
+AAAUI.editBox1:SetPoint("BOTTOM", 302, 350)
+AAAUI.editBox1Text = AAAUI.editBox1:CreateFontString(AAAUI, "OVERLAY", "GameTooltipText")
+AAAUI.editBox1Text:SetHeight(50)
+AAAUI.editBox1Text:SetWidth(50)
+AAAUI.editBox1Text:SetPoint("LEFT", 0, 20)
+AAAUI.editBox1Text:SetText("DKP")
+
+
+AAAUI.editBox2 = CreateFrame("EditBox", "AAAEditBox", AAAUI, "InputBoxTemplate")
+AAAUI.editBox2:SetSize(90,20)
+AAAUI.editBox2:SetAutoFocus(false)
+AAAUI.editBox2:SetPoint("BOTTOM", 330, 300)
+AAAUI.editBox2Text = AAAUI.editBox2:CreateFontString(AAAUI, "OVERLAY", "GameTooltipText")
+AAAUI.editBox2Text:SetHeight(60)
+AAAUI.editBox2Text:SetWidth(50)
+AAAUI.editBox2Text:SetPoint("LEFT", 0, 20)
+AAAUI.editBox2Text:SetText("Reason")
+
+AAAUI.rosterUpdateBtn1 = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
+AAAUI.rosterUpdateBtn1:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 190);
+AAAUI.rosterUpdateBtn1:SetSize(140, 40);
+AAAUI.rosterUpdateBtn1:SetText("Update Roster");
+AAAUI.rosterUpdateBtn1:SetNormalFontObject("GameFontNormalLarge");
+AAAUI.rosterUpdateBtn1:SetHighlightFontObject("GameFontHighlightLarge");
+AAAUI.rosterUpdateBtn1:SetScript("OnClick", RosterUpdate)
+
+AAAUI.changelogBtn1 = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
+AAAUI.changelogBtn1:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 670);
+AAAUI.changelogBtn1:SetSize(140, 40);
+AAAUI.changelogBtn1:SetText("Export bids");
+AAAUI.changelogBtn1:SetNormalFontObject("GameFontNormalLarge");
+AAAUI.changelogBtn1:SetHighlightFontObject("GameFontHighlightLarge");
+AAAUI.changelogBtn1:SetScript("OnClick", DisplayChangelogItems)
+
+AAAUI.changelogBtn2 = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
+AAAUI.changelogBtn2:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 630);
+AAAUI.changelogBtn2:SetSize(140, 40);
+AAAUI.changelogBtn2:SetText("Export DKP");
+AAAUI.changelogBtn2:SetNormalFontObject("GameFontNormalLarge");
+AAAUI.changelogBtn2:SetHighlightFontObject("GameFontHighlightLarge");
+AAAUI.changelogBtn2:SetScript("OnClick", DisplayChangelogDKP)
+
+AAAUI.wipeDKPBtn1 = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
+AAAUI.wipeDKPBtn1:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 270);
+AAAUI.wipeDKPBtn1:SetSize(140, 40);
+AAAUI.wipeDKPBtn1:SetText("Wipe DKP");
+AAAUI.wipeDKPBtn1:SetNormalFontObject("GameFontNormalLarge");
+AAAUI.wipeDKPBtn1:SetHighlightFontObject("GameFontHighlightLarge");
+AAAUI.wipeDKPBtn1:SetScript("OnClick", PopupWipeDKP)
+
+AAAUI.reloadBtn = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
+AAAUI.reloadBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 70);
+AAAUI.reloadBtn:SetSize(140, 40);
+AAAUI.reloadBtn:SetText("Reload UI");
+AAAUI.reloadBtn:SetNormalFontObject("GameFontNormalLarge");
+AAAUI.reloadBtn:SetHighlightFontObject("GameFontHighlightLarge");
+AAAUI.reloadBtn:SetScript("OnClick", ReloadUI)
+
+AAAUI.addRaidDKPBtn = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
+AAAUI.addRaidDKPBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 150);
+AAAUI.addRaidDKPBtn:SetSize(140, 40);
+AAAUI.addRaidDKPBtn:SetText("Add Raid DKP");
+AAAUI.addRaidDKPBtn:SetNormalFontObject("GameFontNormalLarge");
+AAAUI.addRaidDKPBtn:SetHighlightFontObject("GameFontHighlightLarge");
+AAAUI.addRaidDKPBtn:SetScript("OnClick", AddRaidDKP)
+
+AAAUI.printBtn = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
+AAAUI.printBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 30);
+AAAUI.printBtn:SetSize(140, 40);
+AAAUI.printBtn:SetText("Refresh roster");
+AAAUI.printBtn:SetNormalFontObject("GameFontNormalLarge");
+AAAUI.printBtn:SetHighlightFontObject("GameFontHighlightLarge");
+AAAUI.printBtn:SetScript("OnClick", RefreshRoster)
+
+AAAUI.wipeRosterBtn = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
+AAAUI.wipeRosterBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 110);
+AAAUI.wipeRosterBtn:SetSize(140, 40);
+AAAUI.wipeRosterBtn:SetText("Wipe Roster");
+AAAUI.wipeRosterBtn:SetNormalFontObject("GameFontNormalLarge");
+AAAUI.wipeRosterBtn:SetHighlightFontObject("GameFontHighlightLarge");
+AAAUI.wipeRosterBtn:SetScript("OnClick", PopupWipeRoster)
+
+AAAUI.testBtn1 = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
+AAAUI.testBtn1:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 430);
+AAAUI.testBtn1:SetSize(140, 40);
+AAAUI.testBtn1:SetText("Test");
+AAAUI.testBtn1:SetNormalFontObject("GameFontNormalLarge");
+AAAUI.testBtn1:SetHighlightFontObject("GameFontHighlightLarge");
+AAAUI.testBtn1:SetScript("OnClick", TestFunction)
+
+-- ---------------------------------
+-- -- Sliders
+-- ---------------------------------
+-- -- Slider 1:
+-- UIConfig.slider1 = CreateFrame("SLIDER", nil, UIConfig, "OptionsSliderTemplate");
+-- UIConfig.slider1:SetPoint("TOP", UIConfig.loadBtn, "BOTTOM", 0, -20);
+-- UIConfig.slider1:SetMinMaxValues(1, 100);
+-- UIConfig.slider1:SetValue(50);
+-- UIConfig.slider1:SetValueStep(30);
+-- UIConfig.slider1:SetObeyStepOnDrag(true);
+
+-- -- Slider 2:
+-- UIConfig.slider2 = CreateFrame("SLIDER", nil, UIConfig, "OptionsSliderTemplate");
+-- UIConfig.slider2:SetPoint("TOP", UIConfig.slider1, "BOTTOM", 0, -20);
+-- UIConfig.slider2:SetMinMaxValues(1, 100);
+-- UIConfig.slider2:SetValue(40);
+-- UIConfig.slider2:SetValueStep(30);
+-- UIConfig.slider2:SetObeyStepOnDrag(true);
+
+-- ---------------------------------
+-- -- Check Buttons
+-- ---------------------------------
+-- -- Check Button 1:
+-- UIConfig.checkBtn1 = CreateFrame("CheckButton", nil, UIConfig, "UICheckButtonTemplate");
+-- UIConfig.checkBtn1:SetPoint("TOPLEFT", UIConfig.slider1, "BOTTOMLEFT", -10, -40);
+-- UIConfig.checkBtn1.text:SetText("My Check Button!");
+
+-- -- Check Button 2:
+-- UIConfig.checkBtn2 = CreateFrame("CheckButton", nil, UIConfig, "UICheckButtonTemplate");
+-- UIConfig.checkBtn2:SetPoint("TOPLEFT", UIConfig.checkBtn1, "BOTTOMLEFT", 0, -10);
+-- UIConfig.checkBtn2.text:SetText("Another Check Button!");
+-- UIConfig.checkBtn2:SetChecked(true);
