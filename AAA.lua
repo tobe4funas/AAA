@@ -1,5 +1,3 @@
-print("You suck ass")
-
 function SortRosterNames()
 	local sortedRoster = {}
 	if #rosterNames >= 1 then
@@ -161,6 +159,27 @@ function SortLastRaidRoster()
 	lastRaidRosterClasses = sortedRosterClasses
 end
 
+function WeeklyDecay()
+	for i = 1, #rosterNames do
+		rosterDetails[rosterNames[i]]["DKP"] = rosterDetails[rosterNames[i]]["DKP"] - 10
+		changelog[#changelog + 1] = rosterNames[i] .. " -10 weekly_decay"
+	end
+end
+
+function PopupWeeklyDecay()
+	StaticPopup_Show("CONFIRM_WEEKLY_DECAY")
+end
+
+StaticPopupDialogs["CONFIRM_WEEKLY_DECAY"] = {
+text = "Apply weekly decay for everyone?",
+button1 = "Accept",
+button2 = "Cancel",
+OnAccept = WeeklyDecay,
+timeout = 0,
+whileDead = true,
+hideOnEscape = true,
+preferredIndex = 3,
+}
 
 
 function OpenAddonFrame()
@@ -258,6 +277,15 @@ function DisplayChangelogDKP()
 	local export_string_in_progress = changelog_dkp[1]
 	for i = 2, #changelog_dkp do
 		export_string_in_progress = export_string_in_progress .. "\n" .. changelog_dkp[i]
+	end
+	export_string = tostring(export_string_in_progress)
+	CreateExportShit()
+end
+
+function DisplayChangelogRoster()
+	local export_string_in_progress = rosterNames[1] .. " " .. rosterDetails[rosterNames[1]]["DKP"] .. " " .. rosterDetails[rosterNames[1]]["class"] .. " " .. rosterDetails[rosterNames[1]]["attendance_percentage"]
+	for i = 2, #rosterNames do
+		export_string_in_progress = export_string_in_progress .. "\n" .. rosterNames[i] .. " " .. rosterDetails[rosterNames[i]]["DKP"] .. " " .. rosterDetails[rosterNames[i]]["class"] .. " " .. rosterDetails[rosterNames[i]]["attendance_percentage"]
 	end
 	export_string = tostring(export_string_in_progress)
 	CreateExportShit()

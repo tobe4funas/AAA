@@ -1,5 +1,3 @@
-print("chat commands telling you to fuck off too")
-
 local bidding_item = ""
 local bidding_item_list = {}
 local current_bid = 0
@@ -12,12 +10,12 @@ local bidding_sequence_has_started = false
 function RemoveDKP()
 	if current_bid ~= 0 and rosterDetails[highest_bidder[1]]["is_an_alt"] == false then
 		rosterDetails[highest_bidder[1]]["DKP"] = rosterDetails[highest_bidder[1]]["DKP"] - current_bid
-		changelog_items[#changelog_items + 1] = date("%m/%d/%Y") .. " " .. highest_bidder[1] .. " " .. current_bid .. " " .. bidding_item
+		changelog_items[#changelog_items + 1] = highest_bidder[1] .. " " .. current_bid .. " " .. bidding_item
 		SendChatMessage(highest_bidder[1] .. " has bought " .. bidding_item .. " for " .. current_bid .. " DKP.", "RAID")
 	elseif current_bid ~= 0 and rosterDetails[highest_bidder[1]]["is_an_alt"] == true then
 		local main_character_name = rosterDetails[highest_bidder[1]]["main"]
 		rosterDetails[main_character_name]["DKP"] = rosterDetails[main_character_name]["DKP"] - current_bid
-		changelog_items[#changelog_items + 1] = date("%m/%d/%Y") .. " " .. highest_bidder[1] .. "(" .. main_character_name .. ") " .. current_bid .. " " .. bidding_item
+		changelog_items[#changelog_items + 1] = highest_bidder[1] .. "(" .. main_character_name .. ") " .. current_bid .. " " .. bidding_item
 		SendChatMessage(rosterDetails[highest_bidder[1]]["main"] .. "(" .. highest_bidder[1] .. ")" .. " has bought " .. bidding_item .. " for " .. current_bid .. " DKP.", "RAID")
 	end
 	ContinueSequence2()
@@ -123,6 +121,17 @@ function Bidding(self, event, text, playerName)
 
 					-- outbid, uztenka dkp, ne tas pats asmuo
 					if new_bid > current_bid and rosterDetails[new_bidder]["DKP"] >= new_bid and highest_bidder[1] ~= new_bidder then
+						highest_bidder = {}
+						highest_bidder[1] = new_bidder
+						current_bid = new_bid
+						SendChatMessage(new_bidder .. "(" .. rosterDetails[new_bidder]["DKP"] .. " DKP) is the highest bidder with " .. keywords[2] .. " DKP. 20 seconds to outbid!", "RAID")
+						BiddingTimerTimeLeft:Cancel()
+ 						BiddingTimerTimeEnded:Cancel()
+						BiddingTimerTimeLeft = C_Timer.NewTimer(15, BiddingTimerIsLeft)
+						BiddingTimerTimeEnded = C_Timer.NewTimer(20, BiddingTimerHasEnded)
+
+					-- matching bid, kai jau yra numerous bids
+					elseif new_bid > current_bid and rosterDetails[new_bidder]["DKP"] >= new_bid and highest_bidder[2] ~= nil then
 						highest_bidder = {}
 						highest_bidder[1] = new_bidder
 						current_bid = new_bid

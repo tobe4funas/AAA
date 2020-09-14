@@ -1,0 +1,30 @@
+------ AAA.lua
+
+SaveRaidRoster() - issaugau current raid roster
+-- needs button.
+RosterUpdate() - roster paupdatinu based on lastRaidRoster + ar vis dar yra guilde
+-- needs button
+WipeDKP() - wipes DKP
+WipeRoster() - wipes changelog, rosterNames, rosterDetails.
+OpenAddonFrame() - opens the addon
+
+------ AAAChatCommands.lua
+
+RemoveDKP() - on confirmation pop up adjusts the DKP. 
+BiddingCanceled() - nutraukiu bidding
+BiddingTimerHasEnded() - confirmationus popupinu, kai baigiasi bidding
+BiddingTimerIsLeft() - liko 5s iki bidding pabaigos
+YourDKP() - pasitikrink kiek turi DKP
+Bidding() - bidding process.
+StartMSBidding() - starts MS bidding
+StartOSBidding() - starts OS bidding
+
+------ AAAFrames.lua
+
+PopupRemoveRoster() - on click function, removes person from the rosterNames
+PopupMakeAnAlt() - pops up Make An Alt popup
+RefreshRoster() - sukuria ir refreshina visa ispiesima ant screeno
+PopupRaiders() - pops up Change Roster Names popup - either alt or DKP
+PopupDKP() - pops up Change Roster Names DKP popup
+AddRaidDKP() - adds DKP to the lastRaidRosterDKPAdjust, ima info is EditBox.
+RemoveLastRaid() - only removes printed stuff in last raid & last raid's classes

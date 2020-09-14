@@ -82,8 +82,8 @@ function AddRaidDKP()
 		if rosterDetails[lastRaidRosterDKPAdjust[i]]["is_an_alt"] == false then
 			rosterDetails[lastRaidRosterDKPAdjust[i]]["DKP"] = rosterDetails[lastRaidRosterDKPAdjust[i]]["DKP"] + DKP_adjust
 			if changelog_dkp == nil then changelog_dkp = {}
-				changelog_dkp[1] = date("%d/%m/%Y") .. " --- " .. lastRaidRosterDKPAdjust[i] .. " --- " .. DKP_adjust .. " --- " .. DKP_adjust_reason
-			else changelog_dkp[#changelog_dkp + 1] = date("%d/%m/%Y") .. " --- " .. lastRaidRosterDKPAdjust[i] .. " --- " .. DKP_adjust .. " --- " .. DKP_adjust_reason
+				changelog_dkp[1] = lastRaidRosterDKPAdjust[i] .. DKP_adjust .. DKP_adjust_reason
+			else changelog_dkp[#changelog_dkp + 1] = lastRaidRosterDKPAdjust[i] .. " " .. DKP_adjust .. " " .. DKP_adjust_reason
 			end
 		-- tracking attendance
 			if DKP_adjust_reason == "attendance" then
@@ -95,8 +95,8 @@ function AddRaidDKP()
 			rosterDetails[main_character]["DKP"] = rosterDetails[main_character]["DKP"] + DKP_adjust
 		-- tracking attendance for main char
 			if changelog_dkp == nil then changelog_dkp = {}
-				changelog_dkp[1] = date("%d/%m/%Y") .. " --- " .. main_character .. " --- " .. DKP_adjust .. " --- " .. DKP_adjust_reason
-			else changelog_dkp[#changelog_dkp + 1] = date("%d/%m/%Y") .. " --- " .. main_character .. " --- " .. DKP_adjust .. " --- " .. DKP_adjust_reason
+				changelog_dkp[1] = main_character .. " " .. DKP_adjust .. " " .. DKP_adjust_reason
+			else changelog_dkp[#changelog_dkp + 1] = main_character .. " " .. DKP_adjust .. " " .. DKP_adjust_reason
 			end
 			if DKP_adjust_reason == "attendance" then
 				rosterDetails[main_character]["attendance_total"] = rosterDetails[main_character]["attendance_total"] + 1
@@ -193,6 +193,19 @@ StaticPopupDialogs["CHANGE_ROSTER_NAMES"] = {
 
 function PopupWipeDKP()
 	StaticPopup_Show("WIPE_DKP", shortName)
+end
+
+function RefreshChangelog()
+	changelog_dkp_backup = {}
+	changelog_items_backup = {}
+	for i = 1, #changelog_dkp do
+		changelog_dkp_backup[i] = changelog_dkp[i]
+	end
+	for i = 1, #changelog_items do
+		changelog_items_backup[i] = changelog_items[i]
+	end
+	changelog_dkp = {}
+	changelog_items = {}
 end
 
 StaticPopupDialogs["WIPE_DKP"] = {

@@ -46,8 +46,24 @@ AAAUI.changelogBtn2:SetNormalFontObject("GameFontNormalLarge");
 AAAUI.changelogBtn2:SetHighlightFontObject("GameFontHighlightLarge");
 AAAUI.changelogBtn2:SetScript("OnClick", DisplayChangelogDKP)
 
+AAAUI.changelogBtn3 = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
+AAAUI.changelogBtn3:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 590);
+AAAUI.changelogBtn3:SetSize(140, 40);
+AAAUI.changelogBtn3:SetText("Export Roster");
+AAAUI.changelogBtn3:SetNormalFontObject("GameFontNormalLarge");
+AAAUI.changelogBtn3:SetHighlightFontObject("GameFontHighlightLarge");
+AAAUI.changelogBtn3:SetScript("OnClick", DisplayChangelogRoster)
+
+AAAUI.changelogBtn4 = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
+AAAUI.changelogBtn4:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 540);
+AAAUI.changelogBtn4:SetSize(140, 40);
+AAAUI.changelogBtn4:SetText("New changelog");
+AAAUI.changelogBtn4:SetNormalFontObject("GameFontNormalLarge");
+AAAUI.changelogBtn4:SetHighlightFontObject("GameFontHighlightLarge");
+AAAUI.changelogBtn4:SetScript("OnClick", RefreshChangelog)
+
 AAAUI.wipeDKPBtn1 = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
-AAAUI.wipeDKPBtn1:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 270);
+AAAUI.wipeDKPBtn1:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 150);
 AAAUI.wipeDKPBtn1:SetSize(140, 40);
 AAAUI.wipeDKPBtn1:SetText("Wipe DKP");
 AAAUI.wipeDKPBtn1:SetNormalFontObject("GameFontNormalLarge");
@@ -63,12 +79,20 @@ AAAUI.reloadBtn:SetHighlightFontObject("GameFontHighlightLarge");
 AAAUI.reloadBtn:SetScript("OnClick", ReloadUI)
 
 AAAUI.addRaidDKPBtn = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
-AAAUI.addRaidDKPBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 150);
+AAAUI.addRaidDKPBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 270);
 AAAUI.addRaidDKPBtn:SetSize(140, 40);
 AAAUI.addRaidDKPBtn:SetText("Add Raid DKP");
 AAAUI.addRaidDKPBtn:SetNormalFontObject("GameFontNormalLarge");
 AAAUI.addRaidDKPBtn:SetHighlightFontObject("GameFontHighlightLarge");
 AAAUI.addRaidDKPBtn:SetScript("OnClick", AddRaidDKP)
+
+AAAUI.addRaidDKPBtn = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
+AAAUI.addRaidDKPBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 230);
+AAAUI.addRaidDKPBtn:SetSize(140, 40);
+AAAUI.addRaidDKPBtn:SetText("Weekly decay");
+AAAUI.addRaidDKPBtn:SetNormalFontObject("GameFontNormalLarge");
+AAAUI.addRaidDKPBtn:SetHighlightFontObject("GameFontHighlightLarge");
+AAAUI.addRaidDKPBtn:SetScript("OnClick", PopupWeeklyDecay)
 
 AAAUI.printBtn = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
 AAAUI.printBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 30);
