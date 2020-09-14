@@ -1,3 +1,5 @@
+print("You suck ass")
+
 function SortRosterNames()
 	local sortedRoster = {}
 	if #rosterNames >= 1 then

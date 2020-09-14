@@ -1,3 +1,5 @@
+print("chat commands telling you to fuck off too")
+
 local bidding_item = ""
 local bidding_item_list = {}
 local current_bid = 0
