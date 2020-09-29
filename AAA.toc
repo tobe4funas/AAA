@@ -3,13 +3,13 @@
 ## Notes: Does something
 ## Author: Tobeforfunas
 ## Version: 1.0
-## SavedVariables: rosterNames, rosterDetails, lastRaidRoster, changelog_items, changelog_dkp, lastRaidRosterClasses, current_bid, lastRaidRosterDKPAdjust, lastRaidRosterClassesDKPAdjust, attendance_total, attendance_percentage, changelog_items_backup, changelog_dkp_backup
+## SavedVariables: rosterGuild, rosterDetails, rosterRaid, rosterRaidClone, changelog_items, changelog_dkp, attendance_total, attendance_percentage, changelog_items_backup, changelog_dkp_backup
 
 AAAFrames.lua
 AAA.lua
-AAA.xml
 
 
-AAAChatCommands.lua
+AAAChatMessages.lua
+AAABidding.lua
 AAAButtons.lua
 AAASlashCommands.lua

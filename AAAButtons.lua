@@ -28,7 +28,10 @@ AAAUI.rosterUpdateBtn1:SetSize(140, 40);
 AAAUI.rosterUpdateBtn1:SetText("Update Roster");
 AAAUI.rosterUpdateBtn1:SetNormalFontObject("GameFontNormalLarge");
 AAAUI.rosterUpdateBtn1:SetHighlightFontObject("GameFontHighlightLarge");
-AAAUI.rosterUpdateBtn1:SetScript("OnClick", RosterUpdate)
+AAAUI.rosterUpdateBtn1:SetScript("OnClick", function()
+	rosterRaid, rosterGuild, rosterRaidClone = SaveRaid(rosterDetails, rosterGuild)
+	UpdateDisplay(false)
+end)
 
 AAAUI.changelogBtn1 = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
 AAAUI.changelogBtn1:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 670);
@@ -36,7 +39,9 @@ AAAUI.changelogBtn1:SetSize(140, 40);
 AAAUI.changelogBtn1:SetText("Export bids");
 AAAUI.changelogBtn1:SetNormalFontObject("GameFontNormalLarge");
 AAAUI.changelogBtn1:SetHighlightFontObject("GameFontHighlightLarge");
-AAAUI.changelogBtn1:SetScript("OnClick", DisplayChangelogItems)
+AAAUI.changelogBtn1:SetScript("OnClick", function()
+	ExportChangelog(changelog_items)
+end)
 
 AAAUI.changelogBtn2 = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
 AAAUI.changelogBtn2:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 630);
@@ -44,7 +49,9 @@ AAAUI.changelogBtn2:SetSize(140, 40);
 AAAUI.changelogBtn2:SetText("Export DKP");
 AAAUI.changelogBtn2:SetNormalFontObject("GameFontNormalLarge");
 AAAUI.changelogBtn2:SetHighlightFontObject("GameFontHighlightLarge");
-AAAUI.changelogBtn2:SetScript("OnClick", DisplayChangelogDKP)
+AAAUI.changelogBtn2:SetScript("OnClick", function()
+	ExportChangelog(changelog_dkp)
+end)
 
 AAAUI.changelogBtn3 = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
 AAAUI.changelogBtn3:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 590);
@@ -52,7 +59,9 @@ AAAUI.changelogBtn3:SetSize(140, 40);
 AAAUI.changelogBtn3:SetText("Export Roster");
 AAAUI.changelogBtn3:SetNormalFontObject("GameFontNormalLarge");
 AAAUI.changelogBtn3:SetHighlightFontObject("GameFontHighlightLarge");
-AAAUI.changelogBtn3:SetScript("OnClick", DisplayChangelogRoster)
+AAAUI.changelogBtn3:SetScript("OnClick", function()
+	ExportRoster(rosterDetails, rosterGuild)
+end)
 
 AAAUI.changelogBtn4 = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
 AAAUI.changelogBtn4:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 540);
@@ -60,15 +69,26 @@ AAAUI.changelogBtn4:SetSize(140, 40);
 AAAUI.changelogBtn4:SetText("New changelog");
 AAAUI.changelogBtn4:SetNormalFontObject("GameFontNormalLarge");
 AAAUI.changelogBtn4:SetHighlightFontObject("GameFontHighlightLarge");
-AAAUI.changelogBtn4:SetScript("OnClick", RefreshChangelog)
+AAAUI.changelogBtn4:SetScript("OnClick", function()
+	changelog_items, changelog_items_backup = RefreshChangelogs(changelog_items, changelog_items_backup)
+	changelog_dkp, changelog_dkp_backup = RefreshChangelogs(changelog_dkp, changelog_dkp_backup)
+end)
 
 AAAUI.wipeDKPBtn1 = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
-AAAUI.wipeDKPBtn1:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 150);
+AAAUI.wipeDKPBtn1:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 270);
 AAAUI.wipeDKPBtn1:SetSize(140, 40);
 AAAUI.wipeDKPBtn1:SetText("Wipe DKP");
 AAAUI.wipeDKPBtn1:SetNormalFontObject("GameFontNormalLarge");
 AAAUI.wipeDKPBtn1:SetHighlightFontObject("GameFontHighlightLarge");
 AAAUI.wipeDKPBtn1:SetScript("OnClick", PopupWipeDKP)
+
+AAAUI.wipeDKPBtn1 = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
+AAAUI.wipeDKPBtn1:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 230);
+AAAUI.wipeDKPBtn1:SetSize(140, 40);
+AAAUI.wipeDKPBtn1:SetText("Weekly decay");
+AAAUI.wipeDKPBtn1:SetNormalFontObject("GameFontNormalLarge");
+AAAUI.wipeDKPBtn1:SetHighlightFontObject("GameFontHighlightLarge");
+AAAUI.wipeDKPBtn1:SetScript("OnClick", PopupWeeklyDKPDecay)
 
 AAAUI.reloadBtn = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
 AAAUI.reloadBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 70);
@@ -79,20 +99,16 @@ AAAUI.reloadBtn:SetHighlightFontObject("GameFontHighlightLarge");
 AAAUI.reloadBtn:SetScript("OnClick", ReloadUI)
 
 AAAUI.addRaidDKPBtn = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
-AAAUI.addRaidDKPBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 270);
+AAAUI.addRaidDKPBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 150);
 AAAUI.addRaidDKPBtn:SetSize(140, 40);
 AAAUI.addRaidDKPBtn:SetText("Add Raid DKP");
 AAAUI.addRaidDKPBtn:SetNormalFontObject("GameFontNormalLarge");
 AAAUI.addRaidDKPBtn:SetHighlightFontObject("GameFontHighlightLarge");
-AAAUI.addRaidDKPBtn:SetScript("OnClick", AddRaidDKP)
-
-AAAUI.addRaidDKPBtn = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
-AAAUI.addRaidDKPBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 230);
-AAAUI.addRaidDKPBtn:SetSize(140, 40);
-AAAUI.addRaidDKPBtn:SetText("Weekly decay");
-AAAUI.addRaidDKPBtn:SetNormalFontObject("GameFontNormalLarge");
-AAAUI.addRaidDKPBtn:SetHighlightFontObject("GameFontHighlightLarge");
-AAAUI.addRaidDKPBtn:SetScript("OnClick", PopupWeeklyDecay)
+AAAUI.addRaidDKPBtn:SetScript("OnClick", function()
+	local number = AAAUI.editBox1:GetText()
+	local reason = AAAUI.editBox2:GetText()
+	AdjustRaidDKP(number, reason)
+end)
 
 AAAUI.printBtn = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
 AAAUI.printBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 30);
@@ -100,7 +116,8 @@ AAAUI.printBtn:SetSize(140, 40);
 AAAUI.printBtn:SetText("Refresh roster");
 AAAUI.printBtn:SetNormalFontObject("GameFontNormalLarge");
 AAAUI.printBtn:SetHighlightFontObject("GameFontHighlightLarge");
-AAAUI.printBtn:SetScript("OnClick", RefreshRoster)
+AAAUI.printBtn:SetScript("OnClick", function()
+	UpdateDisplay(true)end)
 
 AAAUI.wipeRosterBtn = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
 AAAUI.wipeRosterBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 110);

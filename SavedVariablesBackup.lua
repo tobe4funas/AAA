@@ -6,134 +6,150 @@ rosterNames = {
 	"Bokonuts", -- [4]
 	"Jockyr", -- [5]
 	"Brok", -- [6]
-	"Jaredkushner", -- [7]
-	"Lornia", -- [8]
-	"Kuutti", -- [9]
-	"Novotank", -- [10]
-	"Ertregor", -- [11]
-	"Tobeforfunas", -- [12]
-	"Valiney", -- [13]
-	"Ratje", -- [14]
-	"Fakéreg", -- [15]
-	"Udziec", -- [16]
-	"Mayev", -- [17]
-	"Pulttilukko", -- [18]
-	"Aishea", -- [19]
-	"Rubor", -- [20]
+	"Lornia", -- [7]
+	"Kuutti", -- [8]
+	"Novotank", -- [9]
+	"Ertregor", -- [10]
+	"Tobeforfunas", -- [11]
+	"Valiney", -- [12]
+	"Ratje", -- [13]
+	"Fakéreg", -- [14]
+	"Udziec", -- [15]
+	"Mayev", -- [16]
+	"Pulttilukko", -- [17]
+	"Aishea", -- [18]
+	"Rubor", -- [19]
+	"Medokji", -- [20]
 	"Converter", -- [21]
 	"Bebo", -- [22]
 	"Moridin", -- [23]
 	"Francisco", -- [24]
-	"Redrocket", -- [25]
-	"Calculon", -- [26]
-	"Meatflops", -- [27]
-	"Zatarina", -- [28]
-	"Xinlisupreme", -- [29]
-	"Smosti", -- [30]
-	"Kitsina", -- [31]
-	"Eiy", -- [32]
-	"Valkryon", -- [33]
-	"Antiristo", -- [34]
-	"Healeena", -- [35]
-	"Medih", -- [36]
-	"Safonia", -- [37]
-	"Coroutine", -- [38]
+	"Bangcuck", -- [25]
+	"Syedal", -- [26]
+	"Redrocket", -- [27]
+	"Calculon", -- [28]
+	"Mortemer", -- [29]
+	"Liepa", -- [30]
+	"Meatflops", -- [31]
+	"Zatarina", -- [32]
+	"Xinlisupreme", -- [33]
+	"Smosti", -- [34]
+	"Kitsina", -- [35]
+	"Eiy", -- [36]
+	"Valkryon", -- [37]
+	"Antiristo", -- [38]
+	"Healeena", -- [39]
+	"Medih", -- [40]
+	"Safonia", -- [41]
+	"Coroutine", -- [42]
 }
 rosterDetails = {
 	["Medih"] = {
 		"Medih", -- [1]
 		["attendance_starting"] = 0,
-		["DKP"] = 500,
+		["DKP"] = 555,
 		["main"] = "",
-		["is_an_alt"] = false,
+		["attendance_total"] = 2,
 		["alts"] = {
 		},
 		["class"] = "Druid",
-		["attendance_total"] = 1,
+		["is_an_alt"] = false,
 		["attendance_percentage"] = 100,
 	},
 	["Bebo"] = {
 		"Bebo", -- [1]
 		["attendance_starting"] = 0,
-		["DKP"] = 110,
+		["DKP"] = 160,
 		["main"] = "",
-		["is_an_alt"] = false,
+		["attendance_total"] = 2,
 		["alts"] = {
 		},
 		["class"] = "Mage",
-		["attendance_total"] = 1,
+		["is_an_alt"] = false,
 		["attendance_percentage"] = 100,
 	},
 	["Redrocket"] = {
 		"Redrocket", -- [1]
 		["attendance_starting"] = 0,
-		["DKP"] = 260,
+		["DKP"] = 315,
 		["main"] = "",
-		["is_an_alt"] = false,
+		["attendance_total"] = 2,
 		["alts"] = {
 		},
 		["class"] = "Warlock",
-		["attendance_total"] = 1,
+		["is_an_alt"] = false,
 		["attendance_percentage"] = 100,
 	},
 	["Ratje"] = {
 		"Ratje", -- [1]
 		["attendance_starting"] = 0,
-		["DKP"] = 125,
+		["DKP"] = 130,
 		["main"] = "",
-		["is_an_alt"] = false,
+		["attendance_total"] = 2,
 		["alts"] = {
 		},
 		["class"] = "Rogue",
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 100,
+	},
+	["Syedal"] = {
+		"Syedal", -- [1]
+		["attendance_starting"] = 1,
+		["DKP"] = 65,
+		["main"] = "",
+		["class"] = "Mage",
+		["alts"] = {
+		},
 		["attendance_total"] = 1,
+		["is_an_alt"] = false,
 		["attendance_percentage"] = 100,
 	},
 	["Ertregor"] = {
 		"Ertregor", -- [1]
 		["attendance_starting"] = 0,
-		["DKP"] = 345,
+		["DKP"] = 390,
 		["main"] = "",
-		["is_an_alt"] = false,
+		["class"] = "Warrior",
 		["alts"] = {
 		},
-		["attendance_total"] = 1,
-		["class"] = "Warrior",
+		["attendance_total"] = 2,
+		["is_an_alt"] = false,
 		["attendance_percentage"] = 100,
 	},
 	["Coroutine"] = {
 		"Coroutine", -- [1]
-		["main"] = "",
+		["DKP"] = 245,
 		["is_an_alt"] = false,
-		["attendance_percentage"] = 100,
-		["attendance_total"] = 1,
+		["main"] = "",
+		["attendance_starting"] = 0,
 		["alts"] = {
 		},
+		["attendance_total"] = 2,
 		["class"] = "Druid",
-		["attendance_starting"] = 0,
-		["DKP"] = 190,
+		["attendance_percentage"] = 100,
 	},
 	["Fakéreg"] = {
 		"Fakéreg", -- [1]
 		["attendance_starting"] = 0,
 		["DKP"] = 35,
 		["main"] = "",
-		["is_an_alt"] = false,
+		["attendance_total"] = 1,
 		["alts"] = {
 		},
 		["class"] = "Rogue",
-		["attendance_total"] = 1,
-		["attendance_percentage"] = 100,
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 50,
 	},
 	["Pulttilukko"] = {
 		"Pulttilukko", -- [1]
 		["attendance_starting"] = 0,
-		["DKP"] = 680,
+		["DKP"] = 665,
 		["main"] = "",
-		["is_an_alt"] = false,
+		["attendance_total"] = 2,
 		["alts"] = {
 		},
 		["class"] = "Hunter",
-		["attendance_total"] = 1,
+		["is_an_alt"] = false,
 		["attendance_percentage"] = 100,
 	},
 	["Kelluar"] = {
@@ -141,69 +157,81 @@ rosterDetails = {
 		["attendance_starting"] = 0,
 		["DKP"] = 0,
 		["main"] = "Bokonuts",
-		["is_an_alt"] = true,
+		["attendance_total"] = 0,
 		["alts"] = {
 		},
 		["class"] = "Warlock",
-		["attendance_total"] = 0,
+		["is_an_alt"] = true,
 		["attendance_percentage"] = 0,
 	},
 	["Healeena"] = {
 		"Healeena", -- [1]
-		["main"] = "",
+		["DKP"] = 270,
 		["is_an_alt"] = false,
-		["attendance_percentage"] = 100,
-		["attendance_total"] = 1,
+		["main"] = "",
+		["attendance_starting"] = 0,
 		["alts"] = {
 		},
+		["attendance_total"] = 2,
 		["class"] = "Paladin",
-		["attendance_starting"] = 0,
-		["DKP"] = 215,
+		["attendance_percentage"] = 100,
 	},
 	["Smost"] = {
 		"Smost", -- [1]
 		["DKP"] = 0,
 		["main"] = "Smosti",
-		["is_an_alt"] = true,
+		["attendance_total"] = 0,
 		["alts"] = {
 		},
 		["class"] = "Warrior",
 		["attendance_starting"] = 0,
-		["attendance_total"] = 0,
+		["is_an_alt"] = true,
 	},
 	["Michiell"] = {
 		"Michiell", -- [1]
 		["attendance_starting"] = 0,
-		["DKP"] = 785,
+		["DKP"] = 725,
 		["main"] = "",
-		["is_an_alt"] = false,
+		["attendance_total"] = 2,
 		["alts"] = {
 		},
 		["class"] = "Warrior",
-		["attendance_total"] = 1,
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 100,
+	},
+	["Kitsina"] = {
+		"Kitsina", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = 520,
+		["main"] = "",
+		["class"] = "Priest",
+		["alts"] = {
+		},
+		["attendance_total"] = 2,
+		["is_an_alt"] = false,
 		["attendance_percentage"] = 100,
 	},
 	["Tobenofunas"] = {
 		"Tobenofunas", -- [1]
 		["DKP"] = 0,
 		["main"] = "Tobeforfunas",
-		["is_an_alt"] = true,
+		["attendance_total"] = 0,
 		["alts"] = {
 		},
 		["class"] = "Warrior",
 		["attendance_starting"] = 0,
-		["attendance_total"] = 0,
+		["is_an_alt"] = true,
 	},
 	["Valiney"] = {
 		"Valiney", -- [1]
 		["attendance_starting"] = 0,
-		["DKP"] = 1190,
+		["DKP"] = 1215,
 		["main"] = "",
-		["is_an_alt"] = false,
+		["attendance_total"] = 2,
 		["alts"] = {
 		},
 		["class"] = "Rogue",
-		["attendance_total"] = 1,
+		["is_an_alt"] = false,
 		["attendance_percentage"] = 100,
 	},
 	["Safonia"] = {
@@ -211,108 +239,60 @@ rosterDetails = {
 		["attendance_starting"] = 0,
 		["DKP"] = 40,
 		["main"] = "",
-		["is_an_alt"] = false,
+		["attendance_total"] = 1,
 		["alts"] = {
 		},
 		["class"] = "Druid",
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 50,
+	},
+	["Xinlisupreme"] = {
+		"Xinlisupreme", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = 725,
+		["main"] = "",
+		["attendance_total"] = 2,
+		["alts"] = {
+		},
+		["class"] = "Priest",
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 100,
+	},
+	["Mortemer"] = {
+		"Mortemer", -- [1]
+		["attendance_starting"] = 1,
+		["DKP"] = 185,
+		["main"] = "",
+		["class"] = "Warlock",
+		["alts"] = {
+		},
 		["attendance_total"] = 1,
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 100,
+	},
+	["Bangcuck"] = {
+		"Bangcuck", -- [1]
+		["attendance_starting"] = 1,
+		["DKP"] = 220,
+		["main"] = "",
+		["class"] = "Mage",
+		["alts"] = {
+			"Jaredkushner", -- [1]
+		},
+		["attendance_total"] = 1,
+		["is_an_alt"] = false,
 		["attendance_percentage"] = 100,
 	},
 	["Eiy"] = {
 		"Eiy", -- [1]
 		["attendance_starting"] = 0,
-		["DKP"] = 375,
+		["DKP"] = 410,
 		["main"] = "",
-		["is_an_alt"] = false,
+		["attendance_total"] = 2,
 		["alts"] = {
 		},
 		["class"] = "Paladin",
-		["attendance_total"] = 1,
-		["attendance_percentage"] = 100,
-	},
-	["Calculon"] = {
-		"Calculon", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = 700,
-		["main"] = "",
 		["is_an_alt"] = false,
-		["alts"] = {
-		},
-		["class"] = "Warlock",
-		["attendance_total"] = 1,
-		["attendance_percentage"] = 100,
-	},
-	["Rubor"] = {
-		"Rubor", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = 320,
-		["main"] = "",
-		["is_an_alt"] = false,
-		["alts"] = {
-			"Llwun", -- [1]
-		},
-		["class"] = "Hunter",
-		["attendance_total"] = 1,
-		["attendance_percentage"] = 100,
-	},
-	["Brok"] = {
-		"Brok", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = 40,
-		["main"] = "",
-		["is_an_alt"] = false,
-		["alts"] = {
-		},
-		["class"] = "Warrior",
-		["attendance_total"] = 1,
-		["attendance_percentage"] = 100,
-	},
-	["Moridin"] = {
-		"Moridin", -- [1]
-		["main"] = "",
-		["is_an_alt"] = false,
-		["attendance_percentage"] = 100,
-		["attendance_total"] = 1,
-		["alts"] = {
-		},
-		["class"] = "Mage",
-		["attendance_starting"] = 0,
-		["DKP"] = 80,
-	},
-	["Meatflops"] = {
-		"Meatflops", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = 990,
-		["main"] = "",
-		["is_an_alt"] = false,
-		["alts"] = {
-		},
-		["class"] = "Priest",
-		["attendance_total"] = 1,
-		["attendance_percentage"] = 100,
-	},
-	["Mamamio"] = {
-		"Mamamio", -- [1]
-		["DKP"] = 0,
-		["main"] = "Amjad",
-		["is_an_alt"] = true,
-		["alts"] = {
-		},
-		["class"] = "Mage",
-		["attendance_starting"] = 0,
-		["attendance_total"] = 0,
-	},
-	["Tobeforfunas"] = {
-		"Tobeforfunas", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = 560,
-		["main"] = "",
-		["is_an_alt"] = false,
-		["alts"] = {
-			"Tobenofunas", -- [1]
-		},
-		["class"] = "Rogue",
-		["attendance_total"] = 1,
 		["attendance_percentage"] = 100,
 	},
 	["Converter"] = {
@@ -320,253 +300,338 @@ rosterDetails = {
 		["attendance_starting"] = 0,
 		["DKP"] = 40,
 		["main"] = "",
-		["is_an_alt"] = false,
+		["attendance_total"] = 1,
 		["alts"] = {
 		},
 		["class"] = "Mage",
-		["attendance_total"] = 1,
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 50,
+	},
+	["Rubor"] = {
+		"Rubor", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = 325,
+		["main"] = "",
+		["attendance_total"] = 2,
+		["alts"] = {
+			"Llwun", -- [1]
+		},
+		["class"] = "Hunter",
+		["is_an_alt"] = false,
 		["attendance_percentage"] = 100,
 	},
-	["Novotank"] = {
-		"Novotank", -- [1]
+	["Brok"] = {
+		"Brok", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = 90,
 		["main"] = "",
-		["is_an_alt"] = false,
-		["attendance_percentage"] = 0,
-		["attendance_total"] = 0,
+		["attendance_total"] = 2,
 		["alts"] = {
 		},
 		["class"] = "Warrior",
-		["attendance_starting"] = 0,
-		["DKP"] = 175,
-	},
-	["Mayev"] = {
-		"Mayev", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = 780,
-		["main"] = "",
 		["is_an_alt"] = false,
-		["alts"] = {
-		},
-		["class"] = "Rogue",
-		["attendance_total"] = 1,
 		["attendance_percentage"] = 100,
 	},
-	["Toulack"] = {
-		"Toulack", -- [1]
-		["DKP"] = 0,
-		["main"] = "Bokonuts",
-		["is_an_alt"] = true,
-		["alts"] = {
-		},
-		["class"] = "Mage",
-		["attendance_starting"] = 0,
-		["attendance_total"] = 0,
-	},
-	["Amjad"] = {
-		"Amjad", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = 1315,
+	["Liepa"] = {
+		"Liepa", -- [1]
+		["attendance_starting"] = 1,
+		["DKP"] = 235,
 		["main"] = "",
-		["is_an_alt"] = false,
-		["alts"] = {
-			"Mamamio", -- [1]
-		},
-		["class"] = "Warrior",
-		["attendance_total"] = 1,
-		["attendance_percentage"] = 100,
-	},
-	["Bokonuts"] = {
-		"Bokonuts", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = 205,
-		["main"] = "",
-		["is_an_alt"] = false,
-		["alts"] = {
-			"Toulack", -- [1]
-			"Kelluar", -- [2]
-		},
-		["class"] = "Warrior",
-		["attendance_total"] = 1,
-		["attendance_percentage"] = 100,
-	},
-	["Francisco"] = {
-		"Francisco", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = 260,
-		["main"] = "",
-		["is_an_alt"] = false,
+		["class"] = "Warlock",
 		["alts"] = {
 		},
 		["attendance_total"] = 1,
-		["class"] = "Mage",
+		["is_an_alt"] = false,
 		["attendance_percentage"] = 100,
 	},
-	["Antiristo"] = {
-		"Antiristo", -- [1]
+	["Meatflops"] = {
+		"Meatflops", -- [1]
 		["attendance_starting"] = 0,
-		["DKP"] = 475,
+		["DKP"] = 875,
 		["main"] = "",
-		["is_an_alt"] = false,
-		["alts"] = {
-		},
-		["class"] = "Paladin",
-		["attendance_total"] = 1,
-		["attendance_percentage"] = 100,
-	},
-	["Valkryon"] = {
-		"Valkryon", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = 240,
-		["main"] = "",
-		["is_an_alt"] = false,
-		["alts"] = {
-		},
-		["class"] = "Paladin",
-		["attendance_total"] = 1,
-		["attendance_percentage"] = 100,
-	},
-	["Zatarina"] = {
-		"Zatarina", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = 1185,
-		["main"] = "",
-		["is_an_alt"] = false,
+		["attendance_total"] = 2,
 		["alts"] = {
 		},
 		["class"] = "Priest",
-		["attendance_total"] = 1,
+		["is_an_alt"] = false,
 		["attendance_percentage"] = 100,
 	},
-	["Udziec"] = {
-		"Udziec", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = -50,
-		["main"] = "",
-		["is_an_alt"] = false,
+	["Mamamio"] = {
+		"Mamamio", -- [1]
+		["DKP"] = 0,
+		["main"] = "Amjad",
+		["attendance_total"] = 0,
 		["alts"] = {
+		},
+		["class"] = "Mage",
+		["attendance_starting"] = 0,
+		["is_an_alt"] = true,
+	},
+	["Tobeforfunas"] = {
+		"Tobeforfunas", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = 615,
+		["main"] = "",
+		["attendance_total"] = 2,
+		["alts"] = {
+			"Tobenofunas", -- [1]
 		},
 		["class"] = "Rogue",
-		["attendance_total"] = 1,
-		["attendance_percentage"] = 100,
-	},
-	["Lukiduke"] = {
-		"Lukiduke", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = -5,
-		["main"] = "",
 		["is_an_alt"] = false,
-		["alts"] = {
-		},
-		["class"] = "Warrior",
-		["attendance_total"] = 1,
-		["attendance_percentage"] = 100,
-	},
-	["Llwun"] = {
-		"Llwun", -- [1]
-		["DKP"] = 330,
-		["main"] = "Rubor",
-		["is_an_alt"] = true,
-		["alts"] = {
-		},
-		["class"] = "Druid",
-		["attendance_starting"] = 0,
-		["attendance_total"] = 0,
-	},
-	["Aishea"] = {
-		"Aishea", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = 695,
-		["main"] = "",
-		["is_an_alt"] = false,
-		["alts"] = {
-		},
-		["class"] = "Hunter",
-		["attendance_total"] = 1,
-		["attendance_percentage"] = 100,
-	},
-	["Kuutti"] = {
-		"Kuutti", -- [1]
-		["main"] = "",
-		["is_an_alt"] = false,
-		["attendance_percentage"] = 100,
-		["attendance_total"] = 1,
-		["alts"] = {
-		},
-		["class"] = "Warrior",
-		["attendance_starting"] = 0,
-		["DKP"] = 550,
-	},
-	["Jockyr"] = {
-		"Jockyr", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = 450,
-		["main"] = "",
-		["is_an_alt"] = false,
-		["alts"] = {
-		},
-		["class"] = "Warrior",
-		["attendance_total"] = 1,
 		["attendance_percentage"] = 100,
 	},
 	["Jaredkushner"] = {
 		"Jaredkushner", -- [1]
 		["attendance_starting"] = 0,
 		["DKP"] = 180,
-		["main"] = "",
-		["is_an_alt"] = false,
+		["main"] = "Bangcuck",
+		["attendance_total"] = 1,
 		["alts"] = {
 		},
 		["class"] = "Warrior",
-		["attendance_total"] = 1,
+		["is_an_alt"] = true,
 		["attendance_percentage"] = 100,
+	},
+	["Medokji"] = {
+		"Medokji", -- [1]
+		["attendance_starting"] = 1,
+		["DKP"] = 100,
+		["main"] = "",
+		["class"] = "Hunter",
+		["alts"] = {
+		},
+		["attendance_total"] = 1,
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 100,
+	},
+	["Mayev"] = {
+		"Mayev", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = 830,
+		["main"] = "",
+		["attendance_total"] = 2,
+		["alts"] = {
+		},
+		["class"] = "Rogue",
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 100,
+	},
+	["Kuutti"] = {
+		"Kuutti", -- [1]
+		["DKP"] = 550,
+		["is_an_alt"] = false,
+		["main"] = "",
+		["attendance_starting"] = 0,
+		["alts"] = {
+		},
+		["attendance_total"] = 1,
+		["class"] = "Warrior",
+		["attendance_percentage"] = 50,
+	},
+	["Bokonuts"] = {
+		"Bokonuts", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = 260,
+		["main"] = "",
+		["attendance_total"] = 2,
+		["alts"] = {
+			"Toulack", -- [1]
+			"Kelluar", -- [2]
+		},
+		["class"] = "Warrior",
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 100,
+	},
+	["Francisco"] = {
+		"Francisco", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = 190,
+		["main"] = "",
+		["class"] = "Mage",
+		["alts"] = {
+		},
+		["attendance_total"] = 1,
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 50,
+	},
+	["Jockyr"] = {
+		"Jockyr", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = 480,
+		["main"] = "",
+		["attendance_total"] = 2,
+		["alts"] = {
+		},
+		["class"] = "Warrior",
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 100,
+	},
+	["Antiristo"] = {
+		"Antiristo", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = 460,
+		["main"] = "",
+		["attendance_total"] = 2,
+		["alts"] = {
+		},
+		["class"] = "Paladin",
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 100,
+	},
+	["Llwun"] = {
+		"Llwun", -- [1]
+		["DKP"] = 330,
+		["main"] = "Rubor",
+		["attendance_total"] = 0,
+		["alts"] = {
+		},
+		["class"] = "Druid",
+		["attendance_starting"] = 0,
+		["is_an_alt"] = true,
+	},
+	["Lukiduke"] = {
+		"Lukiduke", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = -5,
+		["main"] = "",
+		["attendance_total"] = 1,
+		["alts"] = {
+		},
+		["class"] = "Warrior",
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 50,
+	},
+	["Udziec"] = {
+		"Udziec", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = 0,
+		["main"] = "",
+		["attendance_total"] = 2,
+		["alts"] = {
+		},
+		["class"] = "Rogue",
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 100,
+	},
+	["Zatarina"] = {
+		"Zatarina", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = 1220,
+		["main"] = "",
+		["attendance_total"] = 2,
+		["alts"] = {
+		},
+		["class"] = "Priest",
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 100,
+	},
+	["Amjad"] = {
+		"Amjad", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = 1020,
+		["main"] = "",
+		["attendance_total"] = 2,
+		["alts"] = {
+			"Mamamio", -- [1]
+		},
+		["class"] = "Warrior",
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 100,
+	},
+	["Aishea"] = {
+		"Aishea", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = 750,
+		["main"] = "",
+		["attendance_total"] = 2,
+		["alts"] = {
+		},
+		["class"] = "Hunter",
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 100,
+	},
+	["Valkryon"] = {
+		"Valkryon", -- [1]
+		["attendance_starting"] = 0,
+		["DKP"] = 55,
+		["main"] = "",
+		["attendance_total"] = 2,
+		["alts"] = {
+		},
+		["class"] = "Paladin",
+		["is_an_alt"] = false,
+		["attendance_percentage"] = 100,
+	},
+	["Toulack"] = {
+		"Toulack", -- [1]
+		["DKP"] = 0,
+		["main"] = "Bokonuts",
+		["attendance_total"] = 0,
+		["alts"] = {
+		},
+		["class"] = "Mage",
+		["attendance_starting"] = 0,
+		["is_an_alt"] = true,
+	},
+	["Novotank"] = {
+		"Novotank", -- [1]
+		["DKP"] = 210,
+		["is_an_alt"] = false,
+		["main"] = "",
+		["attendance_starting"] = 0,
+		["alts"] = {
+		},
+		["attendance_total"] = 1,
+		["class"] = "Warrior",
+		["attendance_percentage"] = 50,
 	},
 	["Lornia"] = {
 		"Lornia", -- [1]
 		["attendance_starting"] = 0,
-		["DKP"] = 100,
+		["DKP"] = 155,
 		["main"] = "",
-		["is_an_alt"] = false,
+		["attendance_total"] = 2,
 		["alts"] = {
 		},
 		["class"] = "Warrior",
-		["attendance_total"] = 1,
+		["is_an_alt"] = false,
 		["attendance_percentage"] = 100,
 	},
-	["Xinlisupreme"] = {
-		"Xinlisupreme", -- [1]
-		["attendance_starting"] = 0,
-		["DKP"] = 670,
-		["main"] = "",
+	["Moridin"] = {
+		"Moridin", -- [1]
+		["DKP"] = 135,
 		["is_an_alt"] = false,
+		["main"] = "",
+		["attendance_starting"] = 0,
 		["alts"] = {
 		},
-		["class"] = "Priest",
-		["attendance_total"] = 1,
+		["attendance_total"] = 2,
+		["class"] = "Mage",
 		["attendance_percentage"] = 100,
 	},
 	["Smosti"] = {
 		"Smosti", -- [1]
-		["main"] = "",
+		["DKP"] = 175,
 		["is_an_alt"] = false,
-		["attendance_percentage"] = 100,
-		["attendance_total"] = 1,
+		["main"] = "",
+		["attendance_starting"] = 0,
 		["alts"] = {
 			"Smost", -- [1]
 		},
+		["attendance_total"] = 2,
 		["class"] = "Priest",
-		["attendance_starting"] = 0,
-		["DKP"] = 120,
+		["attendance_percentage"] = 100,
 	},
-	["Kitsina"] = {
-		"Kitsina", -- [1]
+	["Calculon"] = {
+		"Calculon", -- [1]
 		["attendance_starting"] = 0,
-		["DKP"] = 465,
+		["DKP"] = 755,
 		["main"] = "",
-		["is_an_alt"] = false,
+		["attendance_total"] = 2,
 		["alts"] = {
 		},
-		["attendance_total"] = 1,
-		["class"] = "Priest",
+		["class"] = "Warlock",
+		["is_an_alt"] = false,
 		["attendance_percentage"] = 100,
 	},
 }
@@ -609,190 +674,51 @@ lastRaidRoster = {
 	"Safonia", -- [36]
 	"Coroutine", -- [37]
 }
-lastRaidRoster = {
-	"Bokonuts", -- [1]
-	"Novotank", -- [2]
-	"Michiell", -- [3]
-	"Ertregor", -- [4]
-	"Brok", -- [5]
-	"Jockyr", -- [6]
-	"Lornia", -- [7]
-	"Amjad", -- [8]
-	"Tobeforfunas", -- [9]
-	"Udziec", -- [10]
-	"Mayev", -- [11]
-	"Ratje", -- [12]
-	"Valiney", -- [13]
-	"Rubor", -- [14]
-	"Pulttilukko", -- [15]
-	"Aishea", -- [16]
-	"Medokji", -- [17]
-	"Moridin", -- [18]
-	"Bangcuck", -- [19]
-	"Bebo", -- [20]
-	"Syedal", -- [21]
-	"Redrocket", -- [22]
-	"Calculon", -- [23]
-	"Mortemer", -- [24]
-	"Liepa", -- [25]
-	"Xinlisupreme", -- [26]
-	"Zatarina", -- [27]
-	"Smosti", -- [28]
-	"Kitsina", -- [29]
-	"Meatflops", -- [30]
-	"Antiristo", -- [31]
-	"Valkryon", -- [32]
-	"Healeena", -- [33]
-	"Eiy", -- [34]
-	"Medih", -- [35]
-	"Coroutine", -- [36]
-}
-
-
 changelog_items = {
-	"09/10/2020 Novotank 175 Manual_DKP_adjust", -- [1]
-	"09/10/2020 Bokonuts 190 Manual_DKP_adjust", -- [2]
-	"09/10/2020 Jockyr 415 Manual_DKP_adjust", -- [3]
-	"09/10/2020 Amjad 1280 Manual_DKP_adjust", -- [4]
-	"09/10/2020 Michiell 770 Manual_DKP_adjust", -- [5]
-	"09/10/2020 Lornia 175 Manual_DKP_adjust", -- [6]
-	"09/10/2020 Brok 30 Manual_DKP_adjust", -- [7]
-	"09/10/2020 Redrocket 225 Manual_DKP_adjust", -- [8]
-	"09/10/2020 Calculon 665 Manual_DKP_adjust", -- [9]
-	"09/10/2020 Tobeforfunas 565 Manual_DKP_adjust", -- [10]
-	"09/10/2020 Valiney 1155 Manual_DKP_adjust", -- [11]
-	"09/10/2020 Ratje 90 Manual_DKP_adjust", -- [12]
-	"09/10/2020 Smosti 105 Manual_DKP_adjust", -- [13]
-	"09/10/2020 Xinlisupreme 635 Manual_DKP_adjust", -- [14]
-	"09/10/2020 Zatarina 1150 Manual_DKP_adjust", -- [15]
-	"09/10/2020 Meatflops 955 Manual_DKP_adjust", -- [16]
-	"09/10/2020 Valkryon 205 Manual_DKP_adjust", -- [17]
-	"09/10/2020 Eiy 370 Manual_DKP_adjust", -- [18]
-	"09/10/2020 Antiristo 510 Manual_DKP_adjust", -- [19]
-	"09/10/2020 Bebo 340 Manual_DKP_adjust", -- [20]
-	"09/10/2020 Converter 65 Manual_DKP_adjust", -- [21]
-	"09/10/2020 Medih 465 Manual_DKP_adjust", -- [22]
-	"09/10/2020 Safonia 45 Manual_DKP_adjust", -- [23]
-	"09/10/2020 Rubor 440 Manual_DKP_adjust", -- [24]
-	"09/10/2020 Pulttilukko 815 Manual_DKP_adjust", -- [25]
-	"09/10/2020 Aishea 660 Manual_DKP_adjust", -- [26]
-	"09/10/2020 Udziec -65 Manual_DKP_adjust", -- [27]
-	"09/10/2020 Mayev 745 Manual_DKP_adjust", -- [28]
-	"09/10/2020 Kuutti 535 Manual_DKP_adjust", -- [29]
-	"09/10/2020 Lukiduke -35 Manual_DKP_adjust", -- [30]
-	"09/10/2020 Kitsina 430 Manual_DKP_adjust", -- [31]
-	"09/10/2020 Jaredkushner 170 Manual_DKP_adjust", -- [32]
-	"09/10/2020 Moridin 45 Manual_DKP_adjust", -- [33]
-	"09/10/2020 Healeena 180 Manual_DKP_adjust", -- [34]
-	"09/10/2020 Coroutine 185 Manual_DKP_adjust", -- [35]
-	"09/10/2020 Ertregor 310 Manual_DKP_adjust", -- [36]
-	"09/10/2020 Francisco 230 Manual_DKP_adjust", -- [37]
-	"09/10/2020 Jaredkushner 20 |cffa335ee|Hitem:16959::::::::60:::::::|h[Bracelets of Wrath]|h|r", -- [38]
-	"09/10/2020 Antiristo 20 |cffa335ee|Hitem:19348::::::::60:::::::|h[Red Dragonscale Protector]|h|r", -- [39]
-	"09/10/2020 Lornia 30 |cffa335ee|Hitem:20383::::::::60:::::::|h[Head of the Broodlord Lashlayer]|h|r", -- [40]
-	"09/10/2020 Llwun(Rubor) 20 |cffa335ee|Hitem:19396::::::::60:::::::|h[Taut Dragonhide Belt]|h|r", -- [41]
-	"09/10/2020 Smosti 20 |cffa335ee|Hitem:16919::::::::60:::::::|h[Boots of Transcendence]|h|r", -- [42]
-	"09/10/2020 Jaredkushner 20 |cffa335ee|Hitem:19402::::::::60:::::::|h[Legguards of the Fallen Crusader]|h|r", -- [43]
-	"09/10/2020 Jaredkushner 20 Manual_DKP_adjust", -- [44]
-	"09/10/2020 Brok 20 |cffa335ee|Hitem:16964::::::::60:::::::|h[Gauntlets of Wrath]|h|r", -- [45]
-	"09/10/2020 Kuutti 20 |cffa335ee|Hitem:19405::::::::60:::::::|h[Malfurion's Blessed Bulwark]|h|r", -- [46]
-	"09/10/2020 Michiell 20 |cffa335ee|Hitem:19432::::::::60:::::::|h[Circle of Applied Force]|h|r", -- [47]
-	"09/10/2020 Lornia 20 |cffa335ee|Hitem:19341::::::::60:::::::|h[Lifegiving Gem]|h|r", -- [48]
-	"09/10/2020 Bokonuts 20 |cffa335ee|Hitem:19402::::::::60:::::::|h[Legguards of the Fallen Crusader]|h|r", -- [49]
-	"09/10/2020 Antiristo 50 |cffa335ee|Hitem:19360::::::::60:::::::|h[Lok'amir il Romathis]|h|r", -- [50]
-	"09/10/2020 Bebo 240 |cffa335ee|Hitem:19379::::::::60:::::::|h[Neltharion's Tear]|h|r", -- [51]
-	"09/10/2020 Kuutti 20 |cffa335ee|Hitem:19349::::::::60:::::::|h[Elementium Reinforced Bulwark]|h|r", -- [52]
-	"09/10/2020 Converter 20 |cffa335ee|Hitem:16917::::::::60:::::::|h[Netherwind Mantle]|h|r", -- [53]
-	"09/10/2020 Llwun(Rubor) 30 |cffa335ee|Hitem:19003::::::::60:::::::|h[Head of Nefarian]|h|r", -- [54]
-	"09/10/2020 Tobeforfunas 20 |cffa335ee|Hitem:16907::::::::60:::::::|h[Bloodfang Gloves]|h|r", -- [55]
-	"09/10/2020 Pulttilukko 150 |cffa335ee|Hitem:16942::::::::60:::::::|h[Dragonstalker's Breastplate]|h|r", -- [56]
-	"09/10/2020 Llwun(Rubor) 20 |cffa335ee|Hitem:19386::::::::60:::::::|h[Elementium Threaded Cloak]|h|r", -- [57]
-	"09/10/2020 Safonia 20 |cffa335ee|Hitem:16829::::::::60:::::::|h[Cenarion Boots]|h|r", -- [58]
-	"09/10/2020 Llwun(Rubor) 20 |cffa335ee|Hitem:16835::::::::60:::::::|h[Cenarion Leggings]|h|r", -- [59]
-	"09/10/2020 Udziec -20 Manual_DKP_adjust", -- [60]
-	"09/10/2020 Tobeforfunas 20 |cffa335ee|Hitem:16821::::::::60:::::::|h[Nightslayer Cover]|h|r", -- [61]
-	"09/10/2020 Eiy 30 |cffa335ee|Hitem:18879::::::::60:::::::|h[Heavy Dark Iron Ring]|h|r", -- [62]
-	"09/10/2020 Converter 20 |cffa335ee|Hitem:16802::::::::60:::::::|h[Arcanist Belt]|h|r", -- [63]
-	"09/10/2020 Converter 20 |cffa335ee|Hitem:19145::::::::60:::::::|h[Robe of Volatile Power]|h|r", -- [64]
-	"09/10/2020 Bebo 20 |cffa335ee|Hitem:19136::::::::60:::::::|h[Mana Igniting Cord]|h|r", -- [65]
-	"09/10/2020 Llwun(Rubor) 20 |cffa335ee|Hitem:18803::::::::60:::::::|h[Finkle's Lava Dredger]|h|r", -- [66]
-	"09/10/2020 Pulttilukko 20 |cffa335ee|Hitem:17102::::::::60:::::::|h[Cloak of the Shrouded Mists]|h|r", -- [67]
-	"09/10/2020 Safonia 20 |cffa335ee|Hitem:18810::::::::60:::::::|h[Wild Growth Spaulders]|h|r", -- [68]
-	"09/10/2020 Coroutine 30 |cffa335ee|Hitem:16901::::::::60:::::::|h[Stormrage Legguards]|h|r", -- [69]
-	"09/10/2020 Lornia 60 |cffa335ee|Hitem:17076::::::::60:::::::|h[Bonereaver's Edge]|h|r", -- [70]
-	"09/10/2020 Llwun(Rubor) 20 |cffa335ee|Hitem:19138::::::::60:::::::|h[Band of Sulfuras]|h|r", -- [71]
-	"09/11/2020 Kuutti 20 Manual_DKP_adjust", -- [72]
-	"09/11/2020 Rubor -20 Manual_DKP_adjust", -- [73]
 }
 changelog_dkp = {
-	"11/09/2020 --- Amjad --- 30 --- attendance", -- [1]
-	"11/09/2020 --- Bokonuts --- 30 --- attendance", -- [2]
-	"11/09/2020 --- Kuutti --- 30 --- attendance", -- [3]
-	"11/09/2020 --- Michiell --- 30 --- attendance", -- [4]
-	"11/09/2020 --- Ertregor --- 30 --- attendance", -- [5]
-	"11/09/2020 --- Jockyr --- 30 --- attendance", -- [6]
-	"11/09/2020 --- Lornia --- 30 --- attendance", -- [7]
-	"11/09/2020 --- Brok --- 30 --- attendance", -- [8]
-	"11/09/2020 --- Jaredkushner --- 30 --- attendance", -- [9]
-	"11/09/2020 --- Lukiduke --- 30 --- attendance", -- [10]
-	"11/09/2020 --- Tobeforfunas --- 30 --- attendance", -- [11]
-	"11/09/2020 --- Fakéreg --- 30 --- attendance", -- [12]
-	"11/09/2020 --- Ratje --- 30 --- attendance", -- [13]
-	"11/09/2020 --- Mayev --- 30 --- attendance", -- [14]
-	"11/09/2020 --- Valiney --- 30 --- attendance", -- [15]
-	"11/09/2020 --- Udziec --- 30 --- attendance", -- [16]
-	"11/09/2020 --- Pulttilukko --- 30 --- attendance", -- [17]
-	"11/09/2020 --- Aishea --- 30 --- attendance", -- [18]
-	"11/09/2020 --- Francisco --- 30 --- attendance", -- [19]
-	"11/09/2020 --- Moridin --- 30 --- attendance", -- [20]
-	"11/09/2020 --- Converter --- 30 --- attendance", -- [21]
-	"11/09/2020 --- Bebo --- 30 --- attendance", -- [22]
-	"11/09/2020 --- Redrocket --- 30 --- attendance", -- [23]
-	"11/09/2020 --- Calculon --- 30 --- attendance", -- [24]
-	"11/09/2020 --- Xinlisupreme --- 30 --- attendance", -- [25]
-	"11/09/2020 --- Kitsina --- 30 --- attendance", -- [26]
-	"11/09/2020 --- Zatarina --- 30 --- attendance", -- [27]
-	"11/09/2020 --- Meatflops --- 30 --- attendance", -- [28]
-	"11/09/2020 --- Smosti --- 30 --- attendance", -- [29]
-	"11/09/2020 --- Antiristo --- 30 --- attendance", -- [30]
-	"11/09/2020 --- Healeena --- 30 --- attendance", -- [31]
-	"11/09/2020 --- Eiy --- 30 --- attendance", -- [32]
-	"11/09/2020 --- Valkryon --- 30 --- attendance", -- [33]
-	"11/09/2020 --- Medih --- 30 --- attendance", -- [34]
-	"11/09/2020 --- Rubor --- 30 --- attendance", -- [35]
-	"11/09/2020 --- Safonia --- 30 --- attendance", -- [36]
-	"11/09/2020 --- Coroutine --- 30 --- attendance", -- [37]
-	"11/09/2020 --- Amjad --- 5 --- parses", -- [38]
-	"11/09/2020 --- Bokonuts --- 5 --- parses", -- [39]
-	"11/09/2020 --- Kuutti --- 5 --- parses", -- [40]
-	"11/09/2020 --- Michiell --- 5 --- parses", -- [41]
-	"11/09/2020 --- Ertregor --- 5 --- parses", -- [42]
-	"11/09/2020 --- Jockyr --- 5 --- parses", -- [43]
-	"11/09/2020 --- Lornia --- 5 --- parses", -- [44]
-	"11/09/2020 --- Tobeforfunas --- 5 --- parses", -- [45]
-	"11/09/2020 --- Fakéreg --- 5 --- parses", -- [46]
-	"11/09/2020 --- Ratje --- 5 --- parses", -- [47]
-	"11/09/2020 --- Mayev --- 5 --- parses", -- [48]
-	"11/09/2020 --- Valiney --- 5 --- parses", -- [49]
-	"11/09/2020 --- Udziec --- 5 --- parses", -- [50]
-	"11/09/2020 --- Pulttilukko --- 5 --- parses", -- [51]
-	"11/09/2020 --- Aishea --- 5 --- parses", -- [52]
-	"11/09/2020 --- Moridin --- 5 --- parses", -- [53]
-	"11/09/2020 --- Converter --- 5 --- parses", -- [54]
-	"11/09/2020 --- Redrocket --- 5 --- parses", -- [55]
-	"11/09/2020 --- Calculon --- 5 --- parses", -- [56]
-	"11/09/2020 --- Xinlisupreme --- 5 --- parses", -- [57]
-	"11/09/2020 --- Kitsina --- 5 --- parses", -- [58]
-	"11/09/2020 --- Zatarina --- 5 --- parses", -- [59]
-	"11/09/2020 --- Meatflops --- 5 --- parses", -- [60]
-	"11/09/2020 --- Smosti --- 5 --- parses", -- [61]
-	"11/09/2020 --- Antiristo --- 5 --- parses", -- [62]
-	"11/09/2020 --- Healeena --- 5 --- parses", -- [63]
-	"11/09/2020 --- Eiy --- 5 --- parses", -- [64]
-	"11/09/2020 --- Valkryon --- 5 --- parses", -- [65]
-	"11/09/2020 --- Medih --- 5 --- parses", -- [66]
-	"11/09/2020 --- Safonia --- 5 --- parses", -- [67]
-	"11/09/2020 --- Coroutine --- 5 --- parses", -- [68]
+	"Lukiduke -10 weekly_decay", -- [1]
+	"Michiell -10 weekly_decay", -- [2]
+	"Amjad -10 weekly_decay", -- [3]
+	"Bokonuts -10 weekly_decay", -- [4]
+	"Jockyr -10 weekly_decay", -- [5]
+	"Brok -10 weekly_decay", -- [6]
+	"Lornia -10 weekly_decay", -- [7]
+	"Kuutti -10 weekly_decay", -- [8]
+	"Novotank -10 weekly_decay", -- [9]
+	"Ertregor -10 weekly_decay", -- [10]
+	"Tobeforfunas -10 weekly_decay", -- [11]
+	"Valiney -10 weekly_decay", -- [12]
+	"Ratje -10 weekly_decay", -- [13]
+	"Fakéreg -10 weekly_decay", -- [14]
+	"Udziec -10 weekly_decay", -- [15]
+	"Mayev -10 weekly_decay", -- [16]
+	"Pulttilukko -10 weekly_decay", -- [17]
+	"Aishea -10 weekly_decay", -- [18]
+	"Rubor -10 weekly_decay", -- [19]
+	"Medokji -10 weekly_decay", -- [20]
+	"Converter -10 weekly_decay", -- [21]
+	"Bebo -10 weekly_decay", -- [22]
+	"Moridin -10 weekly_decay", -- [23]
+	"Francisco -10 weekly_decay", -- [24]
+	"Bangcuck -10 weekly_decay", -- [25]
+	"Syedal -10 weekly_decay", -- [26]
+	"Redrocket -10 weekly_decay", -- [27]
+	"Calculon -10 weekly_decay", -- [28]
+	"Mortemer -10 weekly_decay", -- [29]
+	"Liepa -10 weekly_decay", -- [30]
+	"Meatflops -10 weekly_decay", -- [31]
+	"Zatarina -10 weekly_decay", -- [32]
+	"Xinlisupreme -10 weekly_decay", -- [33]
+	"Smosti -10 weekly_decay", -- [34]
+	"Kitsina -10 weekly_decay", -- [35]
+	"Eiy -10 weekly_decay", -- [36]
+	"Valkryon -10 weekly_decay", -- [37]
+	"Antiristo -10 weekly_decay", -- [38]
+	"Healeena -10 weekly_decay", -- [39]
+	"Medih -10 weekly_decay", -- [40]
+	"Safonia -10 weekly_decay", -- [41]
+	"Coroutine -10 weekly_decay", -- [42]
 }
 lastRaidRosterClasses = {
 	"Warrior", -- [1]
@@ -803,35 +729,34 @@ lastRaidRosterClasses = {
 	"Warrior", -- [6]
 	"Warrior", -- [7]
 	"Warrior", -- [8]
-	"Warrior", -- [9]
-	"Warrior", -- [10]
+	"Rogue", -- [9]
+	"Rogue", -- [10]
 	"Rogue", -- [11]
 	"Rogue", -- [12]
 	"Rogue", -- [13]
-	"Rogue", -- [14]
-	"Rogue", -- [15]
-	"Rogue", -- [16]
+	"Hunter", -- [14]
+	"Hunter", -- [15]
+	"Hunter", -- [16]
 	"Hunter", -- [17]
-	"Hunter", -- [18]
+	"Mage", -- [18]
 	"Mage", -- [19]
 	"Mage", -- [20]
 	"Mage", -- [21]
-	"Mage", -- [22]
+	"Warlock", -- [22]
 	"Warlock", -- [23]
 	"Warlock", -- [24]
-	"Priest", -- [25]
+	"Warlock", -- [25]
 	"Priest", -- [26]
 	"Priest", -- [27]
 	"Priest", -- [28]
 	"Priest", -- [29]
-	"Paladin", -- [30]
+	"Priest", -- [30]
 	"Paladin", -- [31]
 	"Paladin", -- [32]
 	"Paladin", -- [33]
-	"Druid", -- [34]
+	"Paladin", -- [34]
 	"Druid", -- [35]
 	"Druid", -- [36]
-	"Druid", -- [37]
 }
 current_bid = nil
 lastRaidRosterDKPAdjust = {
@@ -882,39 +807,218 @@ lastRaidRosterClassesDKPAdjust = {
 	"Warrior", -- [6]
 	"Warrior", -- [7]
 	"Warrior", -- [8]
-	"Warrior", -- [9]
-	"Warrior", -- [10]
+	"Rogue", -- [9]
+	"Rogue", -- [10]
 	"Rogue", -- [11]
 	"Rogue", -- [12]
 	"Rogue", -- [13]
-	"Rogue", -- [14]
-	"Rogue", -- [15]
-	"Rogue", -- [16]
+	"Hunter", -- [14]
+	"Hunter", -- [15]
+	"Hunter", -- [16]
 	"Hunter", -- [17]
-	"Hunter", -- [18]
+	"Mage", -- [18]
 	"Mage", -- [19]
 	"Mage", -- [20]
 	"Mage", -- [21]
-	"Mage", -- [22]
+	"Warlock", -- [22]
 	"Warlock", -- [23]
 	"Warlock", -- [24]
-	"Priest", -- [25]
+	"Warlock", -- [25]
 	"Priest", -- [26]
 	"Priest", -- [27]
 	"Priest", -- [28]
 	"Priest", -- [29]
-	"Paladin", -- [30]
+	"Priest", -- [30]
 	"Paladin", -- [31]
 	"Paladin", -- [32]
 	"Paladin", -- [33]
-	"Druid", -- [34]
+	"Paladin", -- [34]
 	"Druid", -- [35]
 	"Druid", -- [36]
-	"Druid", -- [37]
 }
-attendance_total = 1
+attendance_total = 2
 attendance_percentage = nil
 changelog_items_backup = {
+	"09/13/2020 Mortemer 280 Manual_DKP_adjust", -- [1]
+	"09/13/2020 Medokji 90 Manual_DKP_adjust", -- [2]
+	"09/13/2020 Bangcuck 180 Manual_DKP_adjust", -- [3]
+	"09/13/2020 Syedal 230 Manual_DKP_adjust", -- [4]
+	"09/13/2020 Liepa 505 Manual_DKP_adjust", -- [5]
+	"09/13/2020 Medokji -20 Manual_DKP_adjust", -- [6]
+	"Zatarina 20 |cffa335ee|Hitem:21694::::::::60:::::::|h[Ternary Mantle]|h|r", -- [7]
+	"Eiy 20 |cffa335ee|Hitem:21667::::::::60:::::::|h[Legplates of Blazing Light]|h|r", -- [8]
+	"Jockyr 20 |cffa335ee|Hitem:21651::::::::60:::::::|h[Scaled Sand Reaver Leggings]|h|r", -- [9]
+	"Liepa 300 |cffa335ee|Hitem:20932::::::::60:::::::|h[Qiraji Bindings of Dominance]|h|r", -- [10]
+	"Michiell 110 |cffa335ee|Hitem:20928::::::::60:::::::|h[Qiraji Bindings of Command]|h|r", -- [11]
+	"Antiristo 20 |cffa335ee|Hitem:22402::::::::60:::::::|h[Libram of Grace]|h|r", -- [12]
+	"Syedal 200 |cffa335ee|Hitem:21237::::::::60:::::::|h[Imperial Qiraji Regalia]|h|r", -- [13]
+	"Mortemer 130 |cffa335ee|Hitem:20926::::::::60:::::::|h[Vek'nilash's Circlet]|h|r", -- [14]
+	"Valiney 30 |cffa335ee|Hitem:20930::::::::60:::::::|h[Vek'lor's Diadem]|h|r", -- [15]
+	"Antiristo 40 |cffa335ee|Hitem:20931::::::::60:::::::|h[Skin of the Great Sandworm]|h|r", -- [16]
+	"Rubor 50 |cffa335ee|Hitem:23557::::::::60:::::::|h[Larvae of the Great Worm]|h|r", -- [17]
+	"Ratje 50 |cffa335ee|Hitem:20927::::::::60:::::::|h[Ouro's Intact Hide]|h|r", -- [18]
+	"Amjad 350 |cffa335ee|Hitem:21581::::::::60:::::::|h[Gauntlets of Annihilation]|h|r", -- [19]
+	"Francisco 120 |cffa335ee|Hitem:20933::::::::60:::::::|h[Husk of the Old God]|h|r", -- [20]
+	"Meatflops 160 |cffa335ee|Hitem:21221::::::::60:::::::|h[Eye of C'Thun]|h|r", -- [21]
+	"Pulttilukko 70 |cffa335ee|Hitem:21596::::::::60:::::::|h[Ring of the Godslayer]|h|r", -- [22]
+	"Valkryon 240 |cffa335ee|Hitem:20929::::::::60:::::::|h[Carapace of the Old God]|h|r", -- [23]
+	"09/14/2020 Francisco 40 Manual_DKP_adjust", -- [24]
+	"09/14/2020 Francisco 10 Manual_DKP_adjust", -- [25]
+	"09/15/2020 Lukiduke 10 Manual_DKP_adjust", -- [26]
 }
 changelog_dkp_backup = {
+	"Bokonuts 40 attendance", -- [1]
+	"Novotank 40 attendance", -- [2]
+	"Michiell 40 attendance", -- [3]
+	"Ertregor 40 attendance", -- [4]
+	"Brok 40 attendance", -- [5]
+	"Jockyr 40 attendance", -- [6]
+	"Lornia 40 attendance", -- [7]
+	"Amjad 40 attendance", -- [8]
+	"Tobeforfunas 40 attendance", -- [9]
+	"Udziec 40 attendance", -- [10]
+	"Mayev 40 attendance", -- [11]
+	"Ratje 40 attendance", -- [12]
+	"Valiney 40 attendance", -- [13]
+	"Rubor 40 attendance", -- [14]
+	"Pulttilukko 40 attendance", -- [15]
+	"Aishea 40 attendance", -- [16]
+	"Medokji 40 attendance", -- [17]
+	"Moridin 40 attendance", -- [18]
+	"Bangcuck 40 attendance", -- [19]
+	"Bebo 40 attendance", -- [20]
+	"Syedal 40 attendance", -- [21]
+	"Redrocket 40 attendance", -- [22]
+	"Calculon 40 attendance", -- [23]
+	"Mortemer 40 attendance", -- [24]
+	"Liepa 40 attendance", -- [25]
+	"Xinlisupreme 40 attendance", -- [26]
+	"Zatarina 40 attendance", -- [27]
+	"Smosti 40 attendance", -- [28]
+	"Kitsina 40 attendance", -- [29]
+	"Meatflops 40 attendance", -- [30]
+	"Antiristo 40 attendance", -- [31]
+	"Valkryon 40 attendance", -- [32]
+	"Healeena 40 attendance", -- [33]
+	"Eiy 40 attendance", -- [34]
+	"Medih 40 attendance", -- [35]
+	"Coroutine 40 attendance", -- [36]
+	"Bokonuts 10 parses", -- [37]
+	"Novotank 10 parses", -- [38]
+	"Ertregor 10 parses", -- [39]
+	"Lornia 10 parses", -- [40]
+	"Amjad 10 parses", -- [41]
+	"Tobeforfunas 10 parses", -- [42]
+	"Ratje 10 parses", -- [43]
+	"Valiney 10 parses", -- [44]
+	"Rubor 10 parses", -- [45]
+	"Pulttilukko 10 parses", -- [46]
+	"Aishea 10 parses", -- [47]
+	"Moridin 10 parses", -- [48]
+	"Syedal 10 parses", -- [49]
+	"Redrocket 10 parses", -- [50]
+	"Calculon 10 parses", -- [51]
+	"Mortemer 10 parses", -- [52]
+	"Xinlisupreme 10 parses", -- [53]
+	"Zatarina 10 parses", -- [54]
+	"Smosti 10 parses", -- [55]
+	"Kitsina 10 parses", -- [56]
+	"Meatflops 10 parses", -- [57]
+	"Antiristo 10 parses", -- [58]
+	"Valkryon 10 parses", -- [59]
+	"Healeena 10 parses", -- [60]
+	"Eiy 10 parses", -- [61]
+	"Medih 10 parses", -- [62]
+	"Coroutine 10 parses", -- [63]
+	"Bokonuts 10 signing up", -- [64]
+	"Michiell 10 signing up", -- [65]
+	"Brok 10 signing up", -- [66]
+	"Jockyr 10 signing up", -- [67]
+	"Lornia 10 signing up", -- [68]
+	"Amjad 10 signing up", -- [69]
+	"Tobeforfunas 10 signing up", -- [70]
+	"Udziec 10 signing up", -- [71]
+	"Mayev 10 signing up", -- [72]
+	"Ratje 10 signing up", -- [73]
+	"Valiney 10 signing up", -- [74]
+	"Rubor 10 signing up", -- [75]
+	"Pulttilukko 10 signing up", -- [76]
+	"Aishea 10 signing up", -- [77]
+	"Moridin 10 signing up", -- [78]
+	"Bebo 10 signing up", -- [79]
+	"Redrocket 10 signing up", -- [80]
+	"Calculon 10 signing up", -- [81]
+	"Xinlisupreme 10 signing up", -- [82]
+	"Zatarina 10 signing up", -- [83]
+	"Smosti 10 signing up", -- [84]
+	"Kitsina 10 signing up", -- [85]
+	"Valkryon 10 signing up", -- [86]
+	"Healeena 10 signing up", -- [87]
+	"Eiy 10 signing up", -- [88]
+	"Medih 10 signing up", -- [89]
+	"Coroutine 10 signing up", -- [90]
+	"Bokonuts -5 parses adjustment", -- [91]
+	"Novotank -5 parses adjustment", -- [92]
+	"Ertregor -5 parses adjustment", -- [93]
+	"Lornia -5 parses adjustment", -- [94]
+	"Amjad -5 parses adjustment", -- [95]
+	"Tobeforfunas -5 parses adjustment", -- [96]
+	"Ratje -5 parses adjustment", -- [97]
+	"Valiney -5 parses adjustment", -- [98]
+	"Rubor -5 parses adjustment", -- [99]
+	"Pulttilukko -5 parses adjustment", -- [100]
+	"Aishea -5 parses adjustment", -- [101]
+	"Moridin -5 parses adjustment", -- [102]
+	"Syedal -5 parses adjustment", -- [103]
+	"Redrocket -5 parses adjustment", -- [104]
+	"Calculon -5 parses adjustment", -- [105]
+	"Mortemer -5 parses adjustment", -- [106]
+	"Xinlisupreme -5 parses adjustment", -- [107]
+	"Zatarina -5 parses adjustment", -- [108]
+	"Smosti -5 parses adjustment", -- [109]
+	"Kitsina -5 parses adjustment", -- [110]
+	"Meatflops -5 parses adjustment", -- [111]
+	"Antiristo -5 parses adjustment", -- [112]
+	"Valkryon -5 parses adjustment", -- [113]
+	"Healeena -5 parses adjustment", -- [114]
+	"Eiy -5 parses adjustment", -- [115]
+	"Medih -5 parses adjustment", -- [116]
+	"Coroutine -5 parses adjustment", -- [117]
+	"Amjad 10 raid adjustment", -- [118]
+	"Bokonuts 10 raid adjustment", -- [119]
+	"Kuutti 10 raid adjustment", -- [120]
+	"Michiell 10 raid adjustment", -- [121]
+	"Ertregor 10 raid adjustment", -- [122]
+	"Jockyr 10 raid adjustment", -- [123]
+	"Lornia 10 raid adjustment", -- [124]
+	"Brok 10 raid adjustment", -- [125]
+	"Bangcuck 10 raid adjustment", -- [126]
+	"Lukiduke 10 raid adjustment", -- [127]
+	"Tobeforfunas 10 raid adjustment", -- [128]
+	"Fakéreg 10 raid adjustment", -- [129]
+	"Ratje 10 raid adjustment", -- [130]
+	"Mayev 10 raid adjustment", -- [131]
+	"Valiney 10 raid adjustment", -- [132]
+	"Udziec 10 raid adjustment", -- [133]
+	"Pulttilukko 10 raid adjustment", -- [134]
+	"Aishea 10 raid adjustment", -- [135]
+	"Francisco 10 raid adjustment", -- [136]
+	"Moridin 10 raid adjustment", -- [137]
+	"Converter 10 raid adjustment", -- [138]
+	"Bebo 10 raid adjustment", -- [139]
+	"Redrocket 10 raid adjustment", -- [140]
+	"Calculon 10 raid adjustment", -- [141]
+	"Xinlisupreme 10 raid adjustment", -- [142]
+	"Kitsina 10 raid adjustment", -- [143]
+	"Zatarina 10 raid adjustment", -- [144]
+	"Meatflops 10 raid adjustment", -- [145]
+	"Smosti 10 raid adjustment", -- [146]
+	"Antiristo 10 raid adjustment", -- [147]
+	"Healeena 10 raid adjustment", -- [148]
+	"Eiy 10 raid adjustment", -- [149]
+	"Valkryon 10 raid adjustment", -- [150]
+	"Medih 10 raid adjustment", -- [151]
+	"Rubor 10 raid adjustment", -- [152]
+	"Safonia 10 raid adjustment", -- [153]
+	"Coroutine 10 raid adjustment", -- [154]
 }

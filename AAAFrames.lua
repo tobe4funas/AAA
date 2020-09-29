@@ -7,7 +7,6 @@ AAAUI:RegisterForDrag("LeftButton")
 AAAUI:SetScript("OnDragStart", AAAUI.StartMoving)
 AAAUI:SetScript("OnDragStop", AAAUI.StopMovingOrSizing)
 
-
 AAAUI.scrollframe = CreateFrame("ScrollFrame", "AAAScrollFrame", AAAUI, "UIPanelScrollFrameTemplate");
 AAAUI.scrollchild = CreateFrame("Frame");
 AAAUI.scrollchild:SetPoint("BOTTOM", 0, 0)
@@ -42,7 +41,6 @@ local display_lastname_title = AAAUI:CreateFontString(AAAUI, "OVERLAY", "GameToo
 local display_lastclass_title = AAAUI:CreateFontString(AAAUI, "OVERLAY", "GameTooltipText")
 local display_lastcount_title = AAAUI:CreateFontString(AAAUI, "OVERLAY", "GameTooltipText")
 
-
 local display_raider = {}
 local display_dkp = {}
 local display_class = {}
@@ -70,73 +68,92 @@ local class_x = 220
 local alts_x = 280
 local attendance_x = 400
 local lastcount_x = 500
-local lastraider_x = 525+ 20
-local lastclass_x = 650+ 20
+local lastraider_x = 545
+local lastclass_x = 670
+local guild_starting_height = -30
+local raid_starting_height = -30
 
-function AddRaidDKP()
-	local DKP_adjust = AAAUI.editBox1:GetNumber()
-	local DKP_adjust_reason = AAAUI.editBox2:GetText()
-	if DKP_adjust_reason == "attendance" then attendance_total = attendance_total + 1 end
-	for i = 1, #lastRaidRosterDKPAdjust do
-		-- giving DKP to main char
-		if rosterDetails[lastRaidRosterDKPAdjust[i]]["is_an_alt"] == false then
-			rosterDetails[lastRaidRosterDKPAdjust[i]]["DKP"] = rosterDetails[lastRaidRosterDKPAdjust[i]]["DKP"] + DKP_adjust
-			if changelog_dkp == nil then changelog_dkp = {}
-				changelog_dkp[1] = lastRaidRosterDKPAdjust[i] .. DKP_adjust .. DKP_adjust_reason
-			else changelog_dkp[#changelog_dkp + 1] = lastRaidRosterDKPAdjust[i] .. " " .. DKP_adjust .. " " .. DKP_adjust_reason
-			end
-		-- tracking attendance
-			if DKP_adjust_reason == "attendance" then
-				rosterDetails[lastRaidRosterDKPAdjust[i]]["attendance_total"] = rosterDetails[lastRaidRosterDKPAdjust[i]]["attendance_total"] + 1
-			end
-		-- giving DKP to main char		
-		elseif rosterDetails[lastRaidRosterDKPAdjust[i]]["is_an_alt"] == true then
-			local main_character = rosterDetails[lastRaidRosterDKPAdjust[i]]["main"]
-			rosterDetails[main_character]["DKP"] = rosterDetails[main_character]["DKP"] + DKP_adjust
-		-- tracking attendance for main char
-			if changelog_dkp == nil then changelog_dkp = {}
-				changelog_dkp[1] = main_character .. " " .. DKP_adjust .. " " .. DKP_adjust_reason
-			else changelog_dkp[#changelog_dkp + 1] = main_character .. " " .. DKP_adjust .. " " .. DKP_adjust_reason
-			end
-			if DKP_adjust_reason == "attendance" then
-				rosterDetails[main_character]["attendance_total"] = rosterDetails[main_character]["attendance_total"] + 1
-			end
-
-		end
+function GetClassColorText(playerName, database)
+	local r, g, b, t = 0
+	if database[playerName]["class"] == "Rogue" then
+		r = 1; g = 1; b = 0; t = 1
+	elseif database[playerName]["class"] == "Warrior" then
+		r = 153/255; g = 76/255; b = 0; t = 1
+	elseif database[playerName]["class"] == "Mage" then
+		r = 0; g = 128/255; b = 255; t = 1
+	elseif database[playerName]["class"] == "Warlock" then
+		r = 178/255; g = 102/255; b = 1; t = 1
+	elseif database[playerName]["class"] == "Priest" then
+		r = 1; g = 1; b = 1; t = 1
+	elseif database[playerName]["class"] == "Druid" then
+		r = 1; g = 153/255; b = 51/255; t = 1
+	elseif database[playerName]["class"] == "Paladin" then
+		r = 1; g = 0; b = 1; t = 1
+	elseif database[playerName]["class"] == "Hunter" then
+		r = 0; g = 1; b = 0; t = 1
 	end
-	AAAUI.editBox1:ClearFocus()
-	AAAUI.editBox2:ClearFocus()
-	RefreshRoster()
+	return r, g, b, t
 end
 
-function PopupRemoveRoster()
-	display_raider_fontstring[#rosterNames]:SetText("")
-	display_dkp_fontstring[#rosterNames]:SetText("")
-	display_class_fontstring[#rosterNames]:SetText("")
-	display_alts_fontstring[#rosterNames]:SetText("")
-	display_attendance_fontstring[#rosterNames]:SetText("")
-	display_count_fontstring[#rosterNames]:SetText("")
+function PopupWipeDKP()
+	StaticPopup_Show("WIPE_DKP")
+end
 
-
-
-	for i = 1, #rosterNames do
-		if rosterNames[i] == shortName then
-			for j = 1, #rosterDetails[rosterNames[i]]["alts"] do
-				local alt_name = rosterDetails[rosterNames[i]]["alts"][j]
-				print(alt_name)
-				rosterDetails[alt_name] = nil
-			end
-			rosterDetails[rosterNames[i]] = nil
-			table.remove(rosterNames, i)
-			RefreshRoster()
-			break	
-		end
+function WipeShit()
+	changelog_dkp = {}
+	changelog_items = {}
+	for i = 1, #rosterGuild do
+		rosterDetails[rosterGuild[i]]["DKP"] = 0
 	end
+	UpdateDisplay(false)
 end
 
-function PopupMakeAnAlt()
-	StaticPopup_Show("MAKE_AN_ALT", shortName)
+StaticPopupDialogs["WIPE_DKP"] = {
+  text = "You sure you want to wipe DKP & roster?",
+	button1 = "Accept",
+	button2 = "Cancel",
+	timeout = 0,
+	hideOnEscape = true,
+	OnAccept = WipeShit,
+	whileDead = true,
+	preferredIndex = 3,
+	hideOnEscape = true,
+}
+
+function PopupRaiders(playerName)
+	local popup = StaticPopup_Show("CHANGE_ROSTER_GUILD", playerName)
+	popup.data = playerName
 end
+
+function PopupMakeAnAlt(playerName)
+	local popup = StaticPopup_Show("MAKE_AN_ALT", playerName)
+	popup.data = playerName
+end
+
+function PopupDKP(playerName)
+	local popup = StaticPopup_Show("ADJUST_DKP", playerName)
+	popup.data = playerName
+end
+
+StaticPopupDialogs["ADJUST_DKP"] = {
+  text = "What to do with %s's DKP?",
+	button1 = "Accept",
+	button2 = "Cancel",
+	timeout = 0,
+	hideOnEscape = true,
+	OnShow = function (self, playerName)
+    	self.editBox:SetText("")   
+	end,
+	OnAccept = function(self, playerName)
+	local number = self.editBox:GetText()
+		AdjustPersonDKP(playerName, number)
+	end,
+	hasEditBox = true,
+	whileDead = true,
+
+	preferredIndex = 3,
+	hideOnEscape = true,
+}
 
 StaticPopupDialogs["MAKE_AN_ALT"] = {
   text = "Whose alt should %s be?",
@@ -147,29 +164,9 @@ StaticPopupDialogs["MAKE_AN_ALT"] = {
 	OnShow = function (self, data)
     	self.editBox:SetText("Main character's name")   
 	end,
-
-	OnAccept = function (self, data)
+	OnAccept = function(self, playerName)
 		local main_character_name = self.editBox:GetText()
-		if rosterDetails[main_character_name] ~= nil then
-			rosterDetails[shortName]["is_an_alt"] = true
-			rosterDetails[shortName]["main"] = main_character_name
-			local alt_count = #rosterDetails[main_character_name]["alts"] + 1
-			table.insert(rosterDetails[rosterDetails[shortName]["main"]]["alts"], alt_count, shortName)
-			display_raider_fontstring[#rosterNames]:SetText("")
-					display_dkp_fontstring[#rosterNames]:SetText("")
-					display_class_fontstring[#rosterNames]:SetText("")
-					display_alts_fontstring[#rosterNames]:SetText("")
-					display_attendance_fontstring[#rosterNames]:SetText("")
-					display_count_fontstring[#rosterNames]:SetText("")
-			for i = 1, #rosterNames do
-				if shortName == rosterNames[i] then
-					
-					table.remove(rosterNames, i)
-					RefreshRoster()
-					break
-				end
-			end
-		end
+		MakeAnAlt(playerName, main_character_name)
 	end,
 	hasEditBox = true,
 	whileDead = true,
@@ -178,181 +175,97 @@ StaticPopupDialogs["MAKE_AN_ALT"] = {
 	hideOnEscape = true,
 }
 
-StaticPopupDialogs["CHANGE_ROSTER_NAMES"] = {
+StaticPopupDialogs["CHANGE_ROSTER_GUILD"] = {
   text = "What to do with %s?",
+  	playerName = "%s",
 	button1 = "Remove",
 	button2 = "Make an alt",
-	OnAccept = PopupRemoveRoster,
-	OnCancel = PopupMakeAnAlt,
-	timeout = 0,
-	whileDead = true,
-	hideOnEscape = true,
-	preferredIndex = 3,
-
-}
-
-function PopupWipeDKP()
-	StaticPopup_Show("WIPE_DKP", shortName)
-end
-
-function RefreshChangelog()
-	changelog_dkp_backup = {}
-	changelog_items_backup = {}
-	for i = 1, #changelog_dkp do
-		changelog_dkp_backup[i] = changelog_dkp[i]
-	end
-	for i = 1, #changelog_items do
-		changelog_items_backup[i] = changelog_items[i]
-	end
-	changelog_dkp = {}
-	changelog_items = {}
-end
-
-StaticPopupDialogs["WIPE_DKP"] = {
-  text = "You sure you want to wipe shit?",
-	button1 = "Yes",
-	button2 = "No",
-	OnAccept = function()
-		changelog_dkp_backup = {}
-		changelog_items_backup = {}
-		for i = 1, #rosterNames do
-			rosterDetails[rosterNames[i]]["DKP"] = 0
-			rosterDetails[rosterNames[i]]["attendance_total"] = 0
-			rosterDetails[rosterNames[i]]["attendance_starting"] = 0
-		end
-		for i = 1, #changelog_dkp do
-			changelog_dkp_backup[i] = changelog_dkp[i]
-		end
-		for i = 1, #changelog_items do
-			changelog_items_backup[i] = changelog_items[i]
-		end
-		changelog_dkp = {}
-		changelog_items = {}
-		attendance_total = 0
-		RefreshRoster()
+	OnAccept = function(self, playerName)
+	print(playerName)
+		RemoveGuild(playerName)
+	end,
+	OnCancel = function(self, playerName)
+		PopupMakeAnAlt(playerName)
 	end,
 	timeout = 0,
 	whileDead = true,
 	hideOnEscape = true,
 	preferredIndex = 3,
-
 }
 
-function PopupWipeRoster()
-	StaticPopup_Show("WIPE_ROSTER", shortName)
-end
-
-StaticPopupDialogs["WIPE_ROSTER"] = {
-  text = "You sure you want to wipe shit?",
-	button1 = "Yes",
-	button2 = "No",
-	OnAccept = function()
-	rosterNames = {}
-	rosterDetails = {}
-	changelog_dkp_backup = {}
-	changelog_items_backup = {}
-	for i = 1, #changelog_dkp do
-		changelog_dkp_backup[i] = changelog_dkp[i]
+function ResetDisplay(guildRoster, raidRosterClone)
+	for i = 1, #display_raider do
+		display_raider_fontstring[i]:SetText("")
+		display_dkp_fontstring[i]:SetText("")
+		display_class_fontstring[i]:SetText("")
+		display_alts_fontstring[i]:SetText("")
+		display_attendance_fontstring[i]:SetText("")
+		display_count_fontstring[i]:SetText("")
+	end	
+	for i = 1, #display_lastraid do
+		display_lastraid_fontstring[i]:SetText("")
+		display_lastclass_fontstring[i]:SetText("")
+		display_lastcount_fontstring[i]:SetText("")	
 	end
-	for i = 1, #changelog_items do
-		changelog_items_backup[i] = changelog_items[i]
+end
+
+function UpdateDisplay(should_be_cloned)
+	if should_be_cloned == true then rosterRaidClone = CloneList(rosterRaid) end
+	if #rosterGuild > #display_raider or #rosterRaidClone > #display_lastraid then
+		guild_starting_height = guild_starting_height - (#display_raider * 15)
+		raid_starting_height = raid_starting_height - (#display_lastraid * 15)
+		CreateDisplay(rosterDetails, rosterGuild, rosterRaid, rosterRaidClone, changelog_dkp, guild_starting_height, raid_starting_height)
 	end
-	changelog_dkp = {}
-	changelog_items = {}
-	attendance_total = 0
-	RefreshRoster()
-end,
-	timeout = 0,
-	whileDead = true,
-	hideOnEscape = true,
-	preferredIndex = 3,
-}
-
-
-StaticPopupDialogs["CHANGE_ROSTER_NAMES_DKP"] = {
-  text = "What to do with %s's %s DKP?",
-	button1 = "Adjust DKP",
-	button2 = "Cancel",
-	OnShow = function (self, data)
-    self.editBox:SetText("")
-end,
-hasEditBox = true,
-	OnAccept = function(self, data)
-	rosterDetails[shortName]["DKP"] = rosterDetails[shortName]["DKP"] + tonumber(self.editBox:GetText())
-	changelog_items[#changelog_items + 1] = date("%m/%d/%Y") .. " " .. shortName .. " " ..  tonumber(self.editBox:GetText()) .. " " .. "Manual_DKP_adjust"
-	RefreshRoster()
-end,
-	timeout = 0,
-	whileDead = true,
-	hideOnEscape = true,
-	preferredIndex = 3,
-}
-
-function PopupRaiders()
-	StaticPopup_Show("CHANGE_ROSTER_NAMES", shortName)
+	ResetDisplay(rosterGuild, rosterRaidClone)
+	RenderDisplay(rosterDetails, rosterGuild, rosterRaid, rosterRaidClone)
 end
 
-function PopupDKP()
-	StaticPopup_Show("CHANGE_ROSTER_NAMES_DKP", shortName, shortName_DKP)
-end
 
-function RemoveLastRaid()
-	display_lastcount_title:SetText(#lastRaidRosterDKPAdjust .. "/" .. #lastRaidRoster)
-	for i = 1, #lastRaidRosterDKPAdjust do
-		display_lastraid_fontstring[i]:SetText(lastRaidRosterDKPAdjust[i])
-		display_lastclass_fontstring[i]:SetText(lastRaidRosterClassesDKPAdjust[i])
-		-- class colors
-		if lastRaidRosterClassesDKPAdjust[i] == "Rogue" then
-			display_lastclass_fontstring[i]:SetTextColor(1, 1, 0, 1)
-		elseif lastRaidRosterClassesDKPAdjust[i] == "Warrior" then
-			display_lastclass_fontstring[i]:SetTextColor(153/255, 76/255, 0, 1)
-		elseif lastRaidRosterClassesDKPAdjust[i] == "Mage" then
-			display_lastclass_fontstring[i]:SetTextColor(0/255, 128/255, 255, 1)
-		elseif lastRaidRosterClassesDKPAdjust[i] == "Warlock" then
-			display_lastclass_fontstring[i]:SetTextColor(178/255, 102/255, 1, 1)
-		elseif lastRaidRosterClassesDKPAdjust[i] == "Priest" then
-			display_lastclass_fontstring[i]:SetTextColor(1, 1, 1, 1)
-		elseif lastRaidRosterClassesDKPAdjust[i] == "Hunter" then
-			display_lastclass_fontstring[i]:SetTextColor(0, 1, 0, 1)
-		elseif lastRaidRosterClassesDKPAdjust[i] == "Druid" then
-			display_lastclass_fontstring[i]:SetTextColor(1, 153/255, 51/255, 1)
-		elseif lastRaidRosterClassesDKPAdjust[i] == "Paladin" then
-			display_lastclass_fontstring[i]:SetTextColor(1, 0, 1, 1)
+function RenderDisplay(database, guildRoster, raidRoster, raidRosterClone)
+	for i = 1, #guildRoster do
+		display_raider_fontstring[i]:SetText(guildRoster[i])
+		display_dkp_fontstring[i]:SetText(database[guildRoster[i]]["DKP"])
+		display_class_fontstring[i]:SetText(database[guildRoster[i]]["class"])
+		display_attendance_fontstring[i]:SetText(database[guildRoster[i]]["attendance_percentage"] .. "%")
+		display_count_fontstring[i]:SetText(i)
+
+		local r, g, b, t = GetClassColorText(guildRoster[i], database)
+		display_class_fontstring[i]:SetTextColor(r, g, b, t)
+
+		if #database[guildRoster[i]]["alts"] == 0 then
+			display_alts_fontstring[i]:SetText("---")
+		elseif #database[guildRoster[i]]["alts"] == 1 then
+			display_alts_fontstring[i]:SetText(database[guildRoster[i]]["alts"][1])
+		elseif #database[guildRoster[i]]["alts"] >= 2 then
+			display_alts_fontstring[i]:SetText(database[guildRoster[i]]["alts"][1] .. " etc...")
 		end
+
 	end
+	for i = 1, #raidRosterClone do
+		display_lastraid_fontstring[i]:SetText(raidRosterClone[i])
+		display_lastclass_fontstring[i]:SetText(database[raidRosterClone[i]]["class"])
+		display_lastcount_fontstring[i]:SetText(i)
+
+		local r, g, b, t = GetClassColorText(raidRosterClone[i], database)
+		display_lastclass_fontstring[i]:SetTextColor(r, g, b, t)
+	end
+
+	if raidRosterClone == nil then display_lastcount_title:SetText("0/0")
+	else display_lastcount_title:SetText(#raidRosterClone .. "/" .. #raidRoster) end
+
 end
 
-function lastRaidRosterCloning()
-	lastRaidRosterDKPAdjust = {}
-	lastRaidRosterClassesDKPAdjust = {}
-	for i = 1, #lastRaidRoster do
-		lastRaidRosterDKPAdjust[i] = lastRaidRoster[i]
-		lastRaidRosterClassesDKPAdjust[i] = lastRaidRosterClasses[i]
-	end
-end
 
-
-function RefreshRoster()
-	display_count_title:SetText(#rosterNames)
-	SortRosterNames()
-	lastRaidRosterCloning()
-	display_lastcount_title:SetText(#lastRaidRosterDKPAdjust .. "/" .. #lastRaidRoster)
-	-- calculate attendance
-	if attendance_total == nil then attendance_total = 0 end
-	for i = 1, #rosterNames do
-		rosterDetails[rosterNames[i]]["attendance_percentage"] = rosterDetails[rosterNames[i]]["attendance_total"] / (attendance_total - rosterDetails[rosterNames[i]]["attendance_starting"]) * 100
-	end
-
-	if display_raider[1] == nil then
-		j = -30
-		-- creating raider frames
-		for i = 1, #rosterNames do
-			display_raider[i] = CreateFrame("Button", nill, AAAUI.scrollchild)
-			display_dkp[i] = CreateFrame("Button", nill, AAAUI.scrollchild)
-			display_class[i] = CreateFrame("Button", nill, AAAUI.scrollchild)
-			display_alts[i] = CreateFrame("Button", nill, AAAUI.scrollchild)
+function CreateDisplay(database, guildRoster, raidRoster, raidRosterClone, changelog, guild_height, raid_height)
+	for i = 1, #guildRoster do
+		-- pracheckinu ar reikia dar toki papildoma kurti
+		if display_raider[i] == nil then
+			display_raider[i] = CreateFrame("Button", nil, AAAUI.scrollchild)
+			display_dkp[i] = CreateFrame("Button", nil, AAAUI.scrollchild)
+			display_class[i] = CreateFrame("Button", nil, AAAUI.scrollchild)
+			display_alts[i] = CreateFrame("Button", nil, AAAUI.scrollchild)
 			display_attendance[i] = CreateFrame("Button", nill, AAAUI.scrollchild)
-			display_count[i] = CreateFrame("Button", nill, AAAUI.scrollchild)
+			display_count[i] = CreateFrame("Button", nil, AAAUI.scrollchild)
 			
 			display_raider[i]:SetHeight(20)
 			display_dkp[i]:SetHeight(20)
@@ -368,12 +281,12 @@ function RefreshRoster()
 			display_attendance[i]:SetWidth(80)
 			display_count[i]:SetWidth(20)
 			
-			display_raider[i]:SetPoint("TOPLEFT", raider_x, j)
-			display_dkp[i]:SetPoint("TOPLEFT", dkp_x, j)
-			display_class[i]:SetPoint("TOPLEFT", class_x, j)
-			display_alts[i]:SetPoint("TOPLEFT", alts_x, j)
-			display_attendance[i]:SetPoint("TOPLEFT", attendance_x, j)
-			display_count[i]:SetPoint("TOPLEFT", count_x, j)
+			display_raider[i]:SetPoint("TOPLEFT", raider_x, guild_height)
+			display_dkp[i]:SetPoint("TOPLEFT", dkp_x, guild_height)
+			display_class[i]:SetPoint("TOPLEFT", class_x, guild_height)
+			display_alts[i]:SetPoint("TOPLEFT", alts_x, guild_height)
+			display_attendance[i]:SetPoint("TOPLEFT", attendance_x, guild_height)
+			display_count[i]:SetPoint("TOPLEFT", count_x, guild_height)
 
 
 			display_raider[i]:SetHighlightTexture("Interface/Buttons/UI-Panel-Button-Highlight", "ADD")
@@ -400,66 +313,46 @@ function RefreshRoster()
 			display_count_fontstring[i]:SetJustifyV("TOP")
 			display_count_fontstring[i]:SetJustifyH("CENTER")
 
-			-- display_count_fontstring[i]:SetJustifyH("RIGHT")
-			-- if i < 10 then display_count_fontstring[i]:SetJustifyH("RIGHT")
-			-- elseif i >= 10 then display_count_fontstring[i]:SetJustifyH("LEFT") end
-
-			display_raider_fontstring[i]:SetText(rosterNames[i])
-			display_dkp_fontstring[i]:SetText(rosterDetails[rosterNames[i]]["DKP"])
-			display_class_fontstring[i]:SetText(rosterDetails[rosterNames[i]]["class"])
-			display_attendance_fontstring[i]:SetText(string.format("%.2f %%", rosterDetails[rosterNames[i]]["attendance_percentage"]))
+			display_raider_fontstring[i]:SetText(guildRoster[i])
+			display_dkp_fontstring[i]:SetText(database[guildRoster[i]]["DKP"])
+			display_class_fontstring[i]:SetText(database[guildRoster[i]]["class"])
+			display_attendance_fontstring[i]:SetText(database[guildRoster[i]]["attendance_percentage"] .. "%")
 			display_count_fontstring[i]:SetText(i)
 
-			if rosterDetails[rosterNames[i]]["class"] == "Rogue" then
-				display_class_fontstring[i]:SetTextColor(1, 1, 0, 1)
-			elseif rosterDetails[rosterNames[i]]["class"] == "Warrior" then
-				display_class_fontstring[i]:SetTextColor(153/255, 76/255, 0, 1)
-			elseif rosterDetails[rosterNames[i]]["class"] == "Mage" then
-				display_class_fontstring[i]:SetTextColor(0/255, 128/255, 255, 1)
-			elseif rosterDetails[rosterNames[i]]["class"] == "Warlock" then
-				display_class_fontstring[i]:SetTextColor(178/255, 102/255, 1, 1)
-			elseif rosterDetails[rosterNames[i]]["class"] == "Priest" then
-				display_class_fontstring[i]:SetTextColor(1, 1, 1, 1)
-			elseif rosterDetails[rosterNames[i]]["class"] == "Hunter" then
-				display_class_fontstring[i]:SetTextColor(0, 1, 0, 1)
-			elseif rosterDetails[rosterNames[i]]["class"] == "Druid" then
-				display_class_fontstring[i]:SetTextColor(1, 153/255, 51/255, 1)
-			elseif rosterDetails[rosterNames[i]]["class"] == "Paladin" then
-				display_class_fontstring[i]:SetTextColor(1, 0, 1, 1)
-			end
+			local r, g, b, t = GetClassColorText(guildRoster[i], database)
+			display_class_fontstring[i]:SetTextColor(r, g, b, t)
 
-
-			if #rosterDetails[rosterNames[i]]["alts"] == 0 then
+			if #database[guildRoster[i]]["alts"] == 0 then
 				display_alts_fontstring[i]:SetText("---")
-			elseif #rosterDetails[rosterNames[i]]["alts"] == 1 then
-				display_alts_fontstring[i]:SetText(rosterDetails[rosterNames[i]]["alts"][1])
-			elseif #rosterDetails[rosterNames[i]]["alts"] == 2 then
-				display_alts_fontstring[i]:SetText(rosterDetails[rosterNames[i]]["alts"][1] .. " etc...")
+			elseif #database[guildRoster[i]]["alts"] == 1 then
+				display_alts_fontstring[i]:SetText(database[guildRoster[i]]["alts"][1])
+			elseif #database[guildRoster[i]]["alts"] >= 2 then
+				display_alts_fontstring[i]:SetText(database[guildRoster[i]]["alts"][1] .. " etc...")
 			end
-			
+
+			guild_height = guild_height - 15
+
 			function OnClickDoRaiders()
 				if display_raider_fontstring[i]:GetText() ~= nil then
-					shortName = rosterNames[i]
-					PopupRaiders()
+				local playerName = display_raider_fontstring[i]:GetText()
+				PopupRaiders(playerName)
 				end
 			end
 
 			function OnClickDoDKP()
 				if display_dkp_fontstring[i]:GetText() ~= nil then
-					shortName = rosterNames[i]
-					shortName_DKP = rosterDetails[rosterNames[i]]["DKP"]
-					PopupDKP()
+				local playerName = display_raider_fontstring[i]:GetText()
+				PopupDKP(playerName)
 				end
 			end
 
 			display_raider[i]:SetScript("OnClick", OnClickDoRaiders)
 			display_dkp[i]:SetScript("OnClick", OnClickDoDKP)
-
-			j = j - 15
 		end
-		j = -30
-		-- creating last raid frames
-		for i = 1, #lastRaidRosterDKPAdjust do
+	end
+
+	for i = 1, #raidRosterClone do
+		if display_lastraid[i] == nil then
 			display_lastraid[i] = CreateFrame("Button", nill, AAAUI.scrollchild)
 			display_lastclass[i] = CreateFrame("Button", nill, AAAUI.scrollchild)
 			display_lastcount[i] = CreateFrame("Button", nill, AAAUI.scrollchild)
@@ -472,9 +365,9 @@ function RefreshRoster()
 			display_lastclass[i]:SetWidth(60)
 			display_lastcount[i]:SetWidth(60)
 
-			display_lastraid[i]:SetPoint("TOPLEFT", lastraider_x, j)
-			display_lastclass[i]:SetPoint("TOPLEFT", lastclass_x, j)
-			display_lastcount[i]:SetPoint("TOPLEFT", lastcount_x, j)
+			display_lastraid[i]:SetPoint("TOPLEFT", lastraider_x, raid_height)
+			display_lastclass[i]:SetPoint("TOPLEFT", lastclass_x, raid_height)
+			display_lastcount[i]:SetPoint("TOPLEFT", lastcount_x, raid_height)
 
 			display_lastraid[i]:SetHighlightTexture("Interface/Buttons/UI-Panel-Button-Highlight", "ADD")
 			display_lastclass[i]:SetHighlightTexture("Interface/Buttons/UI-Panel-Button-Highlight", "ADD")
@@ -491,129 +384,31 @@ function RefreshRoster()
 			display_lastcount_fontstring[i]:SetJustifyV("TOP")
 			display_lastcount_fontstring[i]:SetJustifyH("CENTER") 
 
-			display_lastraid_fontstring[i]:SetText(lastRaidRosterDKPAdjust[i])
-			display_lastclass_fontstring[i]:SetText(lastRaidRosterClassesDKPAdjust[i])
+			display_lastraid_fontstring[i]:SetText(raidRosterClone[i])
+			display_lastclass_fontstring[i]:SetText(database[raidRosterClone[i]]["class"])
 			display_lastcount_fontstring[i]:SetText(i)
 
-			if lastRaidRosterClassesDKPAdjust[i] == "Rogue" then
-				display_lastclass_fontstring[i]:SetTextColor(1, 1, 0, 1)
-			elseif lastRaidRosterClassesDKPAdjust[i] == "Warrior" then
-				display_lastclass_fontstring[i]:SetTextColor(153/255, 76/255, 0, 1)
-			elseif lastRaidRosterClassesDKPAdjust[i] == "Mage" then
-				display_lastclass_fontstring[i]:SetTextColor(0/255, 128/255, 255, 1)
-			elseif lastRaidRosterClassesDKPAdjust[i] == "Warlock" then
-				display_lastclass_fontstring[i]:SetTextColor(178/255, 102/255, 1, 1)
-			elseif lastRaidRosterClassesDKPAdjust[i] == "Priest" then
-				display_lastclass_fontstring[i]:SetTextColor(1, 1, 1, 1)
-			elseif lastRaidRosterClassesDKPAdjust[i] == "Hunter" then
-				display_lastclass_fontstring[i]:SetTextColor(0, 1, 0, 1)
-			elseif lastRaidRosterClassesDKPAdjust[i] == "Druid" then
-				display_lastclass_fontstring[i]:SetTextColor(1, 153/255, 51/255, 1)
-			elseif lastRaidRosterClassesDKPAdjust[i] == "Paladin" then
-				display_lastclass_fontstring[i]:SetTextColor(1, 0, 1, 1)
-			end
+			local r, g, b, t = GetClassColorText(raidRosterClone[i], database)
+			display_lastclass_fontstring[i]:SetTextColor(r, g, b, t)
+
+			raid_height = raid_height - 15
 
 			function OnClickDoLastraid()
-				shortName_lastraid = lastRaidRosterDKPAdjust[i]
-				display_lastraid_fontstring[#lastRaidRosterDKPAdjust]:SetText("")
-				display_lastclass_fontstring[#lastRaidRosterDKPAdjust]:SetText("")
-				display_lastcount_fontstring[#lastRaidRosterDKPAdjust]:SetText("")
-
-				table.remove(lastRaidRosterDKPAdjust, i)
-				table.remove(lastRaidRosterClassesDKPAdjust, i)
-				RemoveLastRaid()
+				if display_lastraid_fontstring[i]:GetText() ~= nil then
+					local playerName = display_lastraid_fontstring[i]:GetText()
+					RemoveRaid(playerName)
+				end
 			end
-
-			j = j - 15
-
-			
 			display_lastraid[i]:SetScript("OnClick", OnClickDoLastraid)
-
 		end
-	end
-	-- only updating the list
-	if display_raider[1] ~= nil then
-		-- last raid frames
-		for i = 1, #lastRaidRosterDKPAdjust do
-			if display_lastraid[i] == nil then ReloadUI() end
-			display_lastraid_fontstring[i]:SetText(lastRaidRosterDKPAdjust[i])
-			display_lastclass_fontstring[i]:SetText(lastRaidRosterClassesDKPAdjust[i])
-			display_lastcount_fontstring[i]:SetText(i)
-
-			-- class colors
-			if lastRaidRosterClassesDKPAdjust[i] == "Rogue" then
-				display_lastclass_fontstring[i]:SetTextColor(1, 1, 0, 1)
-			elseif lastRaidRosterClassesDKPAdjust[i] == "Warrior" then
-				display_lastclass_fontstring[i]:SetTextColor(153/255, 76/255, 0, 1)
-			elseif lastRaidRosterClassesDKPAdjust[i] == "Mage" then
-				display_lastclass_fontstring[i]:SetTextColor(0/255, 128/255, 255, 1)
-			elseif lastRaidRosterClassesDKPAdjust[i] == "Warlock" then
-				display_lastclass_fontstring[i]:SetTextColor(178/255, 102/255, 1, 1)
-			elseif lastRaidRosterClassesDKPAdjust[i] == "Priest" then
-				display_lastclass_fontstring[i]:SetTextColor(1, 1, 1, 1)
-			elseif lastRaidRosterClassesDKPAdjust[i] == "Hunter" then
-				display_lastclass_fontstring[i]:SetTextColor(0, 1, 0, 1)
-			elseif lastRaidRosterClassesDKPAdjust[i] == "Druid" then
-				display_lastclass_fontstring[i]:SetTextColor(1, 153/255, 51/255, 1)
-			elseif lastRaidRosterClassesDKPAdjust[i] == "Paladin" then
-				display_lastclass_fontstring[i]:SetTextColor(1, 0, 1, 1)
-			end
-
-		end
-		-- the entire roster
-		for i = 1, #rosterNames do
-			if display_raider[i] == nil then ReloadUI() end
-			display_raider_fontstring[i]:SetText(rosterNames[i])
-			display_dkp_fontstring[i]:SetText(rosterDetails[rosterNames[i]]["DKP"])
-			display_class_fontstring[i]:SetText(rosterDetails[rosterNames[i]]["class"])
-			display_attendance_fontstring[i]:SetText(string.format("%.2f %%", rosterDetails[rosterNames[i]]["attendance_percentage"]))			
-			display_count_fontstring[i]:SetText(i)
-
-			if #rosterDetails[rosterNames[i]]["alts"] == 0 then
-				display_alts_fontstring[i]:SetText("---")
-			elseif #rosterDetails[rosterNames[i]]["alts"] == 1 then
-				display_alts_fontstring[i]:SetText(rosterDetails[rosterNames[i]]["alts"][1])
-			elseif #rosterDetails[rosterNames[i]]["alts"] >= 2 then
-				display_alts_fontstring[i]:SetText(rosterDetails[rosterNames[i]]["alts"][1] .. " etc.")
-			end
-			-- class colors
-			if rosterDetails[rosterNames[i]]["class"] == "Rogue" then
-				display_class_fontstring[i]:SetTextColor(1, 1, 0, 1)
-			elseif rosterDetails[rosterNames[i]]["class"] == "Warrior" then
-				display_class_fontstring[i]:SetTextColor(153/255, 76/255, 0, 1)
-			elseif rosterDetails[rosterNames[i]]["class"] == "Mage" then
-				display_class_fontstring[i]:SetTextColor(0/255, 128/255, 255, 1)
-			elseif rosterDetails[rosterNames[i]]["class"] == "Warlock" then
-				display_class_fontstring[i]:SetTextColor(178/255, 102/255, 1, 1)
-			elseif rosterDetails[rosterNames[i]]["class"] == "Priest" then
-				display_class_fontstring[i]:SetTextColor(1, 1, 1, 1)
-			elseif rosterDetails[rosterNames[i]]["class"] == "Hunter" then
-				display_class_fontstring[i]:SetTextColor(0, 1, 0, 1)
-			elseif rosterDetails[rosterNames[i]]["class"] == "Druid" then
-				display_class_fontstring[i]:SetTextColor(1, 153/255, 51/255, 1)
-			elseif rosterDetails[rosterNames[i]]["class"] == "Paladin" then
-				display_class_fontstring[i]:SetTextColor(1, 0, 1, 1)
-			end
-
-		end
-		if rosterNames[1] == nil then
-			for i = 1, #display_raider do
-				display_raider_fontstring[i]:SetText("")
-				display_dkp_fontstring[i]:SetText("")
-				display_class_fontstring[i]:SetText("")	
-				display_alts_fontstring[i]:SetText("")
-				display_attendance_fontstring[i]:SetText("")
-				display_count_fontstring[i]:SetText("")
-
-			end
-		end
-
 	end
 end
 
-function CreateTitles()
+
+function CreateTitles(guildRoster, raidRoster, raidRosterClone)
 	display_count_title:SetPoint("LEFT", AAAUI.TitleBg, "LEFT", count_x, 0)
-	display_count_title:SetText(#rosterNames)
+	if guildRoster == nil then display_count_title:SetText(0)
+	else display_count_title:SetText(#guildRoster) end
 	display_name_title:SetPoint("LEFT", AAAUI.TitleBg, "LEFT", raider_x, 0)
 	display_name_title:SetText("Raider")
 	display_dkp_title:SetPoint("LEFT", AAAUI.TitleBg, "LEFT", dkp_x, 0)
@@ -623,23 +418,32 @@ function CreateTitles()
 	display_alt_title:SetPoint("LEFT", AAAUI.TitleBg, "LEFT", alts_x, 0)
 	display_alt_title:SetText("Alts")
 	display_attendance_title:SetPoint("LEFT", AAAUI.TitleBg, "LEFT", attendance_x, 0)
-	display_attendance_title:SetText("Attendance, %")
+	display_attendance_title:SetText("Attendance")
 	display_lastname_title:SetPoint("LEFT", AAAUI.TitleBg, "LEFT", lastraider_x, 0)
 	display_lastname_title:SetText("Last raid roster")
 	display_lastclass_title:SetPoint("LEFT", AAAUI.TitleBg, "LEFT", lastclass_x, 0)
 	display_lastclass_title:SetText("Class")
 	display_lastcount_title:SetPoint("LEFT", AAAUI.TitleBg, "LEFT", lastcount_x, 0)
-	display_lastcount_title:SetText(#lastRaidRosterDKPAdjust .. "/" .. #lastRaidRoster)
+	if raidRoster == nil then display_lastcount_title:SetText("0/0")
+	else display_lastcount_title:SetText(#raidRosterClone .. "/" .. #raidRoster) end
 end
 
 function Initialize()
-	if changelog_DKP == nil then changelog_DKP = {} end
+	if rosterDetails == nil then rosterDetails = {} end
+	if rosterGuild == nil then rosterGuild = {} end
+	if attendance_total == nil then attendance_total = 0 end
+	if changelog_dkp == nil then changelog_dkp = {} end
 	if changelog_items == nil then changelog_items = {} end
-	if rosterNames == nil then rosterNames = {} end
-	print("initialize done")
+	if rosterRaid == nil then rosterRaidClone = {} 
+	else rosterRaidClone = CloneList(rosterRaid) end
+	print("AAA initialized.")
 end
 
 AAAUI:RegisterEvent("PLAYER_ENTERING_WORLD")
-AAAUI:HookScript("OnEvent", CreateTitles)
-AAAUI:HookScript("OnEvent", RefreshRoster)
 AAAUI:HookScript("OnEvent", Initialize)
+AAAUI:HookScript("OnEvent", function()
+	CreateTitles(rosterGuild, rosterRaid, rosterRaidClone)
+end)
+AAAUI:HookScript("OnEvent", function()
+	CreateDisplay(rosterDetails, rosterGuild, rosterRaid, rosterRaidClone, changelog_dkp, -30, -30)
+end)
