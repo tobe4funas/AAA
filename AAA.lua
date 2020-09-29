@@ -293,7 +293,11 @@ end
 
 function AdjustPersonDKP(playerName, number, reason)
 	if reason == nil then reason = "Manual DKP adjust" end
-	rosterDetails[playerName]["DKP"] = rosterDetails[playerName]["DKP"] + number
+	local is_an_alt, main_character_name = IsAnAlt(playerName)
+	if is_an_alt == false then
+		rosterDetails[playerName]["DKP"] = rosterDetails[playerName]["DKP"] + number	
+	else rosterDetails[main_character_name]["DKP"] = rosterDetails[main_character_name]["DKP"] + number
+	end
 	changelog_items[#changelog_items + 1] = playerName .. " " .. number .. " " .. reason
 	UpdateDisplay(false)
 end
@@ -338,6 +342,17 @@ function RefreshChangelogs(changelog)
 	return changelog, changelog_backup
 end
 
+function GetGuildRank(playerName)
+	local rank = nil
+	for i = 1, GetNumGuildMembers() do
+		-- local guildName = GetGuildRosterInfo(i)
+		if playerName == string.gsub(GetGuildRosterInfo(i), "-Noggenfogger", "") then
+			_, rank = GetGuildRosterInfo(i)
+			break
+		end
+	end
+	return rank
+end
 
 function OpenAAAFrame()
 	AAAUI:Show()

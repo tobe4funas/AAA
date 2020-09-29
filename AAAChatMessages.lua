@@ -11,7 +11,6 @@ function BiddingUpdate(new_bid, highest_bidders)
 	SendChatMessage("---- " .. new_bid .. " DKP NEW BID -----", "RAID")
 	SendChatMessage("Highest bidder(s) are: " .. names, "RAID")
 	RefreshTimers()
-	print("RefreshTimers shouldve happened")
 end
 
 function BiddingUpdateBimbo(new_bid, highest_bidders)
@@ -33,9 +32,11 @@ function BiddingResults(playerName, new_bid, highest_bid, highest_bidders, bimbo
 
 	local is_an_alt = IsAnAlt(playerName)
 	local DKP = GetDKP(playerName)
-	local _, playerName_rank = GetGuildInfo(playerName)
+	local playerName_rank = GetGuildRank(playerName)
 	local outbidding_yourself = IsInList(playerName, highest_bidders)
 	local outbidding_yourself_bimbo = IsInList(playerName, bimbos)
+	print(playerName)
+	print(playerName_rank)
 	
 	-- ar isvis priimu bid?
 	if BiddingOnHold == false and (OSbidding == true or (MSbidding == true and (playerName_rank == "Officer" or playerName_rank == "Guardian" or playerName_rank == "Member"))) then

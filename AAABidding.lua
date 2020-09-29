@@ -17,32 +17,61 @@ function BiddingSequenceCanceled(action)
 	bidding_item_list = {}
 	SendChatMessage("Bidding has " .. action, "RAID")
 	EndTimers()
- end
+end
 
-function AcceptDKPChanges(winner, bid)
-	local popup = StaticPopup_Show("ACCEPT_DKP_CHANGES", winner, bid, var)
-	popup.data = winner
-	popup.data2 = bid
+function AcceptDKPChanges(winner, bid, reason)
+	StaticPopup_Show("ACCEPT_DKP_CHANGES", winner .. "*" .. bid .. "*" .. reason)
 end
 
 StaticPopupDialogs["ACCEPT_DKP_CHANGES"] = {
-  text = "Do you accept %s winning for %d DKP?",
-	button1 = "Accept",
-	button2 = "Cancel",
-	OnAccept = function(self, winner, bid)
-	SendChatMessage("Congrats to " .. winner .. " for purchasing " .. bidding_item_list[1] .. " for " .. bid .. "DKP.", "RAID")
-	bid = -(bid)
-	AdjustPersonDKP(winner, bid, bidding_item_list[1])
-	ContinueBiddingSequence()
-end,
-	OnCancel = function()
-	BiddingSequenceCanceled("been cancelled.")
-end,
-	timeout = 0,
-	whileDead = true,
-	hideOnEscape = true,
-	preferredIndex = 3,
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+    preferredIndex = 3,
+    button1 = "Accept",
+    button2 = "Cancel",
+    text = "%s",
+    OnHide = function(self)
+        self.data = nil
+    end,
+    OnShow = function(self)
+        self.data = { strsplit("*",self.text:GetText(),3) }
+        self.text:SetText( format("Do you accept %s winning for %s DKP?", unpack(self.data)))
+    end,
+    OnAccept = function(self)
+        local winner, bid, reason = unpack(self.data)
+        SendChatMessage("Congrats to " .. winner .. " for purchasing " .. reason .. " for " .. bid .. "DKP.", "RAID")
+        AdjustPersonDKP(winner, bid * -1, reason)
+        ContinueBiddingSequence()
+    end,
+    OnCancel = function()
+        BiddingSequenceCanceled("been cancelled.")
+    end,  
 }
+
+-- function AcceptDKPChanges(winner, bid, reason)
+-- 	local popup = StaticPopup_Show("ACCEPT_DKP_CHANGES", winner, bid)
+-- 	popup.data = winner
+-- 	popup.data2 = bid
+-- end
+
+-- StaticPopupDialogs["ACCEPT_DKP_CHANGES"] = {
+--   text = "Do you accept %s winning for %d DKP?",
+-- 	button1 = "Accept",
+-- 	button2 = "Cancel",
+-- 	OnAccept = function(self, winner, bid)
+-- 	SendChatMessage("Congrats to " .. winner .. " for purchasing " .. bidding_item_list[1] .. " for " .. bid .. "DKP.", "RAID")
+-- 	bid = -(bid)
+-- 	AdjustPersonDKP(winner, bid, bidding_item_list[1])
+-- 	ContinueBiddingSequence()
+-- end,
+-- 	OnCancel = function()
+-- 	BiddingSequenceCanceled("been cancelled.")
+-- end,
+-- 	timeout = 0,
+-- 	whileDead = true,
+-- 	preferredIndex = 3,
+-- }
 
 function BiddingTimerHasEnded()
 	bidding_on_hold = true
@@ -65,11 +94,11 @@ function BiddingTimerHasEnded()
 			end
 		end
 		SendChatMessage("Winner is - " .. winner, "RAID")
-		AcceptDKPChanges(winner, current_bid)
+		AcceptDKPChanges(winner, current_bid, bidding_item_list[1])
 	elseif current_bidders[1] ~=nil and current_bidders[2] == nil then
-		AcceptDKPChanges(current_bidders[1], current_bid)
+		AcceptDKPChanges(current_bidders[1], current_bid, bidding_item_list[1])
 	elseif freeloaders[1] ~= nil and freeloaders[2] == nil then
-		AcceptDKPChanges(freeloaders[1], 20)	
+		AcceptDKPChanges(freeloaders[1], 20, bidding_item_list[1])	
 	elseif freeloaders[1] ~= nil and freeloaders[2] ~= nil then
 		SendChatMessage("Bidding has ended! Freeloaders rejoice, it's yours!", "RAID")
 		local highest_value = 0
@@ -84,7 +113,7 @@ function BiddingTimerHasEnded()
 			end
 		end
 		SendChatMessage("Winner is - " .. winner, "RAID")
-		AcceptDKPChanges(winner, 20)
+		AcceptDKPChanges(winner, 20, bidding_item_list[1])
 	end
 end
 
@@ -170,13 +199,11 @@ function BiddingSequence(message)
 end
 
 function RefreshTimers()
-	print("RefreshTimers")
 	EndTimers()
 	StartTimers()
 end
 
 function StartTimers()
-	print("StartTimers")
 	BiddingTimerTimeLeft = C_Timer.NewTimer(8, BiddingTimerIsLeft)
 	BiddingTimerTimeEnded = C_Timer.NewTimer(12, BiddingTimerHasEnded)
 end
@@ -188,10 +215,13 @@ function EndTimers()
 end	
 
 function TestFunction()
-	print(freeloaders[1])
-	print(current_bidders[1])
-	print(OSbidding_has_started)
-	print(MSbidding_has_started)
+	local ass = 15
+	local asd = 24
+	local abc = 37
+	local tbl = {ass, asd, abc}
+	print(tbl[1])
+	print(tbl[2])
+	print(tbl[3])
 end
 
 local ChatCommandsFrame=CreateFrame("frame");
