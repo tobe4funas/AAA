@@ -214,16 +214,6 @@ function EndTimers()
 	BiddingTimerTimeEnded:Cancel()
 end	
 
-function TestFunction()
-	local ass = 15
-	local asd = 24
-	local abc = 37
-	local tbl = {ass, asd, abc}
-	print(tbl[1])
-	print(tbl[2])
-	print(tbl[3])
-end
-
 local ChatCommandsFrame=CreateFrame("frame");
 ChatCommandsFrame:RegisterEvent("CHAT_MSG_WHISPER");
 ChatCommandsFrame:HookScript("OnEvent", ReceiveWhisper)

@@ -109,6 +109,7 @@ function SortList(database, list)
 end
 
 function CloneList(list)
+	list = SortList(rosterDetails, list)
 	local cloned_list = {}	
 	for i = 1, #list do
 		cloned_list[i] = list[i]
@@ -352,6 +353,16 @@ function GetGuildRank(playerName)
 		end
 	end
 	return rank
+end
+
+function AddToRaid(playerName)
+	print(playerName)
+	local is_in_raid = IsInRaidRoster(playerName)
+	print(is_in_raid)
+	if is_in_raid == false then
+		table.insert(rosterRaid, playerName)
+		UpdateDisplay(true)
+	end
 end
 
 function OpenAAAFrame()

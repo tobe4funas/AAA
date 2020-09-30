@@ -31,6 +31,8 @@ AAAUI.scrollframe:SetAllPoints(AAAUI);
  
 AAAUI.scrollchild:SetSize(AAAUI.scrollframe:GetWidth(), ( AAAUI.scrollframe:GetHeight() * 2 ));
 
+local menuFrame = CreateFrame("Frame", "ExampleMenuFrame", UIParent, "UIDropDownMenuTemplate")
+
 local display_count_title = AAAUI:CreateFontString(AAAUI, "OVERLAY", "GameTooltipText")
 local display_name_title = AAAUI:CreateFontString(AAAUI, "OVERLAY", "GameTooltipText")
 local display_dkp_title = AAAUI:CreateFontString(AAAUI, "OVERLAY", "GameTooltipText")
@@ -70,8 +72,9 @@ local attendance_x = 400
 local lastcount_x = 500
 local lastraider_x = 545
 local lastclass_x = 670
-local guild_starting_height = -30
-local raid_starting_height = -30
+
+
+
 
 function GetClassColorText(playerName, database)
 	local r, g, b, t = 0
@@ -117,10 +120,11 @@ StaticPopupDialogs["WIPE_DKP"] = {
 	OnAccept = WipeShit,
 	whileDead = true,
 	preferredIndex = 3,
-	hideOnEscape = true,
 }
 
-function PopupRaiders(playerName)
+
+
+function PopupRemoveGuild(playerName)
 	local popup = StaticPopup_Show("CHANGE_ROSTER_GUILD", playerName)
 	popup.data = playerName
 end
@@ -150,9 +154,7 @@ StaticPopupDialogs["ADJUST_DKP"] = {
 	end,
 	hasEditBox = true,
 	whileDead = true,
-
 	preferredIndex = 3,
-	hideOnEscape = true,
 }
 
 StaticPopupDialogs["MAKE_AN_ALT"] = {
@@ -162,7 +164,10 @@ StaticPopupDialogs["MAKE_AN_ALT"] = {
 	timeout = 0,
 	hideOnEscape = true,
 	OnShow = function (self, data)
-    	self.editBox:SetText("Main character's name")   
+    	self.editBox:SetText("Main character's name")
+    	self.editBox:SetScript("OnEscapePressed", function(self)
+ self:GetParent():Hide()
+end)  
 	end,
 	OnAccept = function(self, playerName)
 		local main_character_name = self.editBox:GetText()
@@ -170,22 +175,16 @@ StaticPopupDialogs["MAKE_AN_ALT"] = {
 	end,
 	hasEditBox = true,
 	whileDead = true,
-
 	preferredIndex = 3,
-	hideOnEscape = true,
 }
 
 StaticPopupDialogs["CHANGE_ROSTER_GUILD"] = {
-  text = "What to do with %s?",
+  text = "Are you sure you want to remove %s?",
   	playerName = "%s",
-	button1 = "Remove",
-	button2 = "Make an alt",
+	button1 = "Fuck yes",
+	button2 = "Nope",
 	OnAccept = function(self, playerName)
-	print(playerName)
 		RemoveGuild(playerName)
-	end,
-	OnCancel = function(self, playerName)
-		PopupMakeAnAlt(playerName)
 	end,
 	timeout = 0,
 	whileDead = true,
@@ -210,6 +209,9 @@ function ResetDisplay(guildRoster, raidRosterClone)
 end
 
 function UpdateDisplay(should_be_cloned)
+	local guild_starting_height = -30
+	local raid_starting_height = -30
+
 	if should_be_cloned == true then rosterRaidClone = CloneList(rosterRaid) end
 	if #rosterGuild > #display_raider or #rosterRaidClone > #display_lastraid then
 		guild_starting_height = guild_starting_height - (#display_raider * 15)
@@ -217,11 +219,11 @@ function UpdateDisplay(should_be_cloned)
 		CreateDisplay(rosterDetails, rosterGuild, rosterRaid, rosterRaidClone, changelog_dkp, guild_starting_height, raid_starting_height)
 	end
 	ResetDisplay(rosterGuild, rosterRaidClone)
-	RenderDisplay(rosterDetails, rosterGuild, rosterRaid, rosterRaidClone)
+	RenderDisplay(rosterDetails, rosterGuild, rosterRaid, rosterRaidClone, guild_starting_height, raid_starting_height)
 end
 
 
-function RenderDisplay(database, guildRoster, raidRoster, raidRosterClone)
+function RenderDisplay(database, guildRoster, raidRoster, raidRosterClone, guild_height, raid_height)
 	for i = 1, #guildRoster do
 		display_raider_fontstring[i]:SetText(guildRoster[i])
 		display_dkp_fontstring[i]:SetText(database[guildRoster[i]]["DKP"])
@@ -255,7 +257,6 @@ function RenderDisplay(database, guildRoster, raidRoster, raidRosterClone)
 
 end
 
-
 function CreateDisplay(database, guildRoster, raidRoster, raidRosterClone, changelog, guild_height, raid_height)
 	for i = 1, #guildRoster do
 		-- pracheckinu ar reikia dar toki papildoma kurti
@@ -267,14 +268,14 @@ function CreateDisplay(database, guildRoster, raidRoster, raidRosterClone, chang
 			display_attendance[i] = CreateFrame("Button", nill, AAAUI.scrollchild)
 			display_count[i] = CreateFrame("Button", nil, AAAUI.scrollchild)
 			
-			display_raider[i]:SetHeight(20)
-			display_dkp[i]:SetHeight(20)
-			display_class[i]:SetHeight(20)
-			display_alts[i]:SetHeight(20)
-			display_attendance[i]:SetHeight(20)
-			display_count[i]:SetHeight(20)		
+			display_raider[i]:SetHeight(13)
+			display_dkp[i]:SetHeight(13)
+			display_class[i]:SetHeight(13)
+			display_alts[i]:SetHeight(13)
+			display_attendance[i]:SetHeight(13)
+			display_count[i]:SetHeight(13)		
 
-			display_raider[i]:SetWidth(120)
+			display_raider[i]:SetWidth(400)
 			display_dkp[i]:SetWidth(50)
 			display_class[i]:SetWidth(60)
 			display_alts[i]:SetWidth(120)
@@ -289,12 +290,7 @@ function CreateDisplay(database, guildRoster, raidRoster, raidRosterClone, chang
 			display_count[i]:SetPoint("TOPLEFT", count_x, guild_height)
 
 
-			display_raider[i]:SetHighlightTexture("Interface/Buttons/UI-Panel-Button-Highlight", "ADD")
-			display_dkp[i]:SetHighlightTexture("Interface/Buttons/UI-Panel-Button-Highlight", "ADD")
-			display_class[i]:SetHighlightTexture("Interface/Buttons/UI-Panel-Button-Highlight", "ADD")
-			display_alts[i]:SetHighlightTexture("Interface/Buttons/UI-Panel-Button-Highlight", "ADD")
-			display_attendance[i]:SetHighlightTexture("Interface/Buttons/UI-Panel-Button-Highlight", "ADD")
-			display_count[i]:SetHighlightTexture("Interface/Buttons/UI-Panel-Button-Highlight", "ADD")
+			display_raider[i]:SetHighlightTexture("Interface/FriendsFrame/UI-FriendsFrame-HighlightBar", "ADD")
 			
 			display_raider_fontstring[i] = display_raider[i]:CreateFontString(AAAUI, "OVERLAY", "GameTooltipText")
 			display_dkp_fontstring[i] = display_dkp[i]:CreateFontString(AAAUI, "OVERLAY", "GameTooltipText")
@@ -303,11 +299,11 @@ function CreateDisplay(database, guildRoster, raidRoster, raidRosterClone, chang
 			display_attendance_fontstring[i] = display_attendance[i]:CreateFontString(AAAUI, "OVERLAY", "GameTooltipText")
 			display_count_fontstring[i] = display_count[i]:CreateFontString(AAAUI, "OVERLAY", "GameTooltipText")
 
-			display_raider_fontstring[i]:SetPoint("LEFT", 0, 3)
-			display_dkp_fontstring[i]:SetPoint("LEFT", 0, 3)
-			display_class_fontstring[i]:SetPoint("LEFT", 0, 3)
-			display_alts_fontstring[i]:SetPoint("LEFT", 0, 3)
-			display_attendance_fontstring[i]:SetPoint("LEFT", 0, 3)
+			display_raider_fontstring[i]:SetPoint("LEFT", 0, 0)
+			display_dkp_fontstring[i]:SetPoint("LEFT", 0, 0)
+			display_class_fontstring[i]:SetPoint("LEFT", 0, 0)
+			display_alts_fontstring[i]:SetPoint("LEFT", 0, 0)
+			display_attendance_fontstring[i]:SetPoint("LEFT", 0, 0)
 			
 			display_count_fontstring[i]:SetAllPoints(true)
 			display_count_fontstring[i]:SetJustifyV("TOP")
@@ -332,22 +328,47 @@ function CreateDisplay(database, guildRoster, raidRoster, raidRosterClone, chang
 
 			guild_height = guild_height - 15
 
-			function OnClickDoRaiders()
+			function OnClickDoRemoveGuild()
 				if display_raider_fontstring[i]:GetText() ~= nil then
 				local playerName = display_raider_fontstring[i]:GetText()
-				PopupRaiders(playerName)
+				PopupRemoveGuild(playerName)
 				end
 			end
 
-			function OnClickDoDKP()
+			function OnClickDoMakeAnAlt(i)
+				if display_raider_fontstring[i]:GetText() ~= nil then
+					local playerName = display_raider_fontstring[i]:GetText()
+					PopupMakeAnAlt(playerName)
+				end
+			end
+
+			function OnClickDoDKP(i)
 				if display_dkp_fontstring[i]:GetText() ~= nil then
 				local playerName = display_raider_fontstring[i]:GetText()
 				PopupDKP(playerName)
 				end
 			end
 
-			display_raider[i]:SetScript("OnClick", OnClickDoRaiders)
-			display_dkp[i]:SetScript("OnClick", OnClickDoDKP)
+			function OnClickDoAddRaid(i)
+				if display_raider_fontstring[i]:GetText() ~= nil then
+					local playerName = display_raider_fontstring[i]:GetText()
+					AddToRaid(playerName)
+				end
+			end
+
+			local menu = {
+			    { text = guildRoster[i], isTitle = true},
+			    { text = "Adjust DKP", func = function() OnClickDoDKP(i); end },
+			    { text = "Make an Alt", func = function() OnClickDoMakeAnAlt(i); end },
+			    { text = "Remove from roster", func = function() OnClickDoRemoveGuild(i); end },
+			    { text = "Add to raid", func = function() OnClickDoAddRaid(i); end },
+			}
+
+			display_raider[i]:SetScript("OnClick", function()
+				EasyMenu(menu, menuFrame, "cursor", 0 , 0, "MENU")
+			end)
+			
+
 		end
 	end
 
@@ -357,11 +378,11 @@ function CreateDisplay(database, guildRoster, raidRoster, raidRosterClone, chang
 			display_lastclass[i] = CreateFrame("Button", nill, AAAUI.scrollchild)
 			display_lastcount[i] = CreateFrame("Button", nill, AAAUI.scrollchild)
 
-			display_lastraid[i]:SetHeight(20)
-			display_lastclass[i]:SetHeight(20)
-			display_lastcount[i]:SetHeight(20)
+			display_lastraid[i]:SetHeight(13)
+			display_lastclass[i]:SetHeight(13)
+			display_lastcount[i]:SetHeight(13)
 
-			display_lastraid[i]:SetWidth(120)
+			display_lastraid[i]:SetWidth(180)
 			display_lastclass[i]:SetWidth(60)
 			display_lastcount[i]:SetWidth(60)
 
@@ -369,16 +390,14 @@ function CreateDisplay(database, guildRoster, raidRoster, raidRosterClone, chang
 			display_lastclass[i]:SetPoint("TOPLEFT", lastclass_x, raid_height)
 			display_lastcount[i]:SetPoint("TOPLEFT", lastcount_x, raid_height)
 
-			display_lastraid[i]:SetHighlightTexture("Interface/Buttons/UI-Panel-Button-Highlight", "ADD")
-			display_lastclass[i]:SetHighlightTexture("Interface/Buttons/UI-Panel-Button-Highlight", "ADD")
-			display_lastcount[i]:SetHighlightTexture("Interface/Buttons/UI-Panel-Button-Highlight", "ADD")
+			display_lastraid[i]:SetHighlightTexture("Interface/FriendsFrame/UI-FriendsFrame-HighlightBar", "ADD")
 
 			display_lastraid_fontstring[i] = display_lastraid[i]:CreateFontString(AAAUI, "OVERLAY", "GameTooltipText")
 			display_lastclass_fontstring[i] = display_lastclass[i]:CreateFontString(AAAUI, "OVERLAY", "GameTooltipText")
 			display_lastcount_fontstring[i] = display_lastcount[i]:CreateFontString(AAAUI, "OVERLAY", "GameTooltipText")
 
-			display_lastraid_fontstring[i]:SetPoint("LEFT", 0, 3)
-			display_lastclass_fontstring[i]:SetPoint("LEFT", 0, 3)
+			display_lastraid_fontstring[i]:SetPoint("LEFT", 0, 0)
+			display_lastclass_fontstring[i]:SetPoint("LEFT", 0, 0)
 
 			display_lastcount_fontstring[i]:SetAllPoints(true)
 			display_lastcount_fontstring[i]:SetJustifyV("TOP")
@@ -403,7 +422,6 @@ function CreateDisplay(database, guildRoster, raidRoster, raidRosterClone, chang
 		end
 	end
 end
-
 
 function CreateTitles(guildRoster, raidRoster, raidRosterClone)
 	display_count_title:SetPoint("LEFT", AAAUI.TitleBg, "LEFT", count_x, 0)
@@ -447,3 +465,8 @@ end)
 AAAUI:HookScript("OnEvent", function()
 	CreateDisplay(rosterDetails, rosterGuild, rosterRaid, rosterRaidClone, changelog_dkp, -30, -30)
 end)
+
+
+
+
+
