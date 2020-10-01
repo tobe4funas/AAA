@@ -1,5 +1,6 @@
 local bidding_item_list = {}
-local current_bid = 19
+
+local current_bid = 10
 local current_bidders = {}
 local freeloaders = {}
 local MSbidding_has_started = false
@@ -17,6 +18,7 @@ function BiddingSequenceCanceled(action)
 	bidding_item_list = {}
 	SendChatMessage("Bidding has " .. action, "RAID")
 	EndTimers()
+	CurrentBiddingItem:Hide()
 end
 
 function AcceptDKPChanges(winner, bid, reason)
@@ -48,30 +50,6 @@ StaticPopupDialogs["ACCEPT_DKP_CHANGES"] = {
         BiddingSequenceCanceled("been cancelled.")
     end,  
 }
-
--- function AcceptDKPChanges(winner, bid, reason)
--- 	local popup = StaticPopup_Show("ACCEPT_DKP_CHANGES", winner, bid)
--- 	popup.data = winner
--- 	popup.data2 = bid
--- end
-
--- StaticPopupDialogs["ACCEPT_DKP_CHANGES"] = {
---   text = "Do you accept %s winning for %d DKP?",
--- 	button1 = "Accept",
--- 	button2 = "Cancel",
--- 	OnAccept = function(self, winner, bid)
--- 	SendChatMessage("Congrats to " .. winner .. " for purchasing " .. bidding_item_list[1] .. " for " .. bid .. "DKP.", "RAID")
--- 	bid = -(bid)
--- 	AdjustPersonDKP(winner, bid, bidding_item_list[1])
--- 	ContinueBiddingSequence()
--- end,
--- 	OnCancel = function()
--- 	BiddingSequenceCanceled("been cancelled.")
--- end,
--- 	timeout = 0,
--- 	whileDead = true,
--- 	preferredIndex = 3,
--- }
 
 function BiddingTimerHasEnded()
 	bidding_on_hold = true
@@ -176,7 +154,7 @@ function BiddingSequence(message)
 			table.insert(bidding_item_list, word)
 		end
 	end
-	current_bid = 19
+	current_bid = 10
 	current_bidders = {}
 	freeloaders = {}
 	-- OS, nes buvo MS
@@ -186,15 +164,18 @@ function BiddingSequence(message)
 	elseif OSbidding_has_started == true then
 		table.remove(bidding_item_list, 1)
 		if bidding_item_list[1] ~= nil then
+			BiddingControl(bidding_item_list[1])
 			MSBidding(bidding_item_list[1])
 		elseif bidding_item_list[1] == nil then
 		BiddingSequenceCanceled("ended.")
 		end
 	-- MS, nes nebuvo nieko
 	elseif bidding_item_list[1] ~= nil then
+		BiddingControl(bidding_item_list[1])
 		MSBidding(bidding_item_list[1])
 	elseif bidding_item_list[1] == nil then
 		BiddingSequenceCanceled("ended.")
+		CurrentBiddingItem:Hide()
 	end
 end
 
@@ -217,3 +198,10 @@ end
 local ChatCommandsFrame=CreateFrame("frame");
 ChatCommandsFrame:RegisterEvent("CHAT_MSG_WHISPER");
 ChatCommandsFrame:HookScript("OnEvent", ReceiveWhisper)
+
+function BiddingControl(item_name)
+	CurrentBiddingItem:Show()
+	local bidding_item_ID, _, _, _, bidding_item_icon = GetItemInfoInstant(item_name)
+	local bidding_item_link = GetItemInfo(bidding_item_ID)
+	CurrentBiddingItemTexture:SetTexture(bidding_item_icon)
+end

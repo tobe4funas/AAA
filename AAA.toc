@@ -3,7 +3,7 @@
 ## Notes: Does something
 ## Author: Tobeforfunas
 ## Version: 1.0
-## SavedVariables: rosterGuild, rosterDetails, rosterRaid, rosterRaidClone, changelog_items, changelog_dkp, attendance_total, attendance_percentage, changelog_items_backup, changelog_dkp_backup
+## SavedVariables: rosterGuild, rosterDetails, rosterRaid, rosterRaidClone, changelog_items, changelog_dkp, attendance_total, attendance_percentage, changelog_items_backup, changelog_dkp_backup, test_variable
 
 AAAFrames.lua
 AAA.lua

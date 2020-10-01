@@ -29,34 +29,34 @@ function BiddingUpdateBimbo(new_bid, highest_bidders)
 end
 
 function BiddingResults(playerName, new_bid, highest_bid, highest_bidders, bimbos, MSbidding, OSbidding, BiddingOnHold)
-
 	local is_an_alt = IsAnAlt(playerName)
 	local DKP = GetDKP(playerName)
 	local playerName_rank = GetGuildRank(playerName)
+	local is_all_in = false
 	local outbidding_yourself = IsInList(playerName, highest_bidders)
 	local outbidding_yourself_bimbo = IsInList(playerName, bimbos)
-	print(playerName)
-	print(playerName_rank)
+	if new_bid < DKP then new_bid = RoundNumbers(new_bid)
+	elseif new_bid == DKP then is_all_in = true end
 	
 	-- ar isvis priimu bid?
 	if BiddingOnHold == false and (OSbidding == true or (MSbidding == true and (playerName_rank == "Officer" or playerName_rank == "Guardian" or playerName_rank == "Member"))) then
 		-- kur dabar tas bid nueina?
 
 		-- simple outbid
-		if new_bid > highest_bid and DKP >= new_bid and outbidding_yourself == false then
+		if (new_bid >= (highest_bid + 10) or (new_bid > highest_bid and is_all_in == true)) and DKP >= new_bid and outbidding_yourself == false then
 			highest_bid = new_bid
 			highest_bidders = {}
 			table.insert(highest_bidders, playerName)
 			BiddingUpdate(new_bid, highest_bidders)
 		-- simple matching bid
-		elseif new_bid == highest_bid and DKP >= new_bid and outbidding_yourself == false then
+		elseif new_bid == highest_bid and highest_bid > 10 and DKP >= new_bid and outbidding_yourself == false then
 			table.insert(highest_bidders, playerName)
 			BiddingUpdate(new_bid, highest_bidders)
 		-- outbidding yourself
-		elseif new_bid > highest_bid and DKP >= new_bid and highest_bidders[2] == nil and outbidding_yourself == true then
+		elseif new_bid >= highest_bid and DKP >= new_bid and highest_bidders[2] == nil and outbidding_yourself == true then
 			ReplyError(playerName, "outbidding yourself.")
 		-- outbidding yourself but it's ok because there's more than 1 bidder
-		elseif new_bid > highest_bid and DKP >= new_bid and highest_bidders[2] ~= nil then
+		elseif (new_bid >= (highest_bid + 10) or (new_bid > highest_bid and is_all_in == true)) and highest_bidders[2] ~= nil then
 			highest_bid = new_bid
 			highest_bidders = {}
 			table.insert(highest_bidders, playerName)
@@ -65,7 +65,7 @@ function BiddingResults(playerName, new_bid, highest_bid, highest_bidders, bimbo
 			ReplyError(playerName, "you're only allowed to win if nobody with actual DKP will want this.")
 			table.insert(bimbos, playerName)
 			BiddingUpdateBimbo(20, bimbos)
-		elseif new_bid <highest_bid and DKP >= new_bid then
+		elseif new_bid < (highest_bid + 10) and DKP >= new_bid then
 			ReplyError(playerName, "bid is too low.")
 		elseif new_bid > highest_bid and DKP < new_bid then
 			ReplyError(playerName, "insufficient DKP.")
@@ -83,7 +83,6 @@ function ReplyDKP(playerName, database)
 	local is_an_alt, main_character_name = IsAnAlt(playerName)
 	if is_an_alt == false then
 		local DKP = GetDKP(playerName)
-		print(DKP)
 		SendChatMessage(playerName .. ", you have " .. DKP .. " DKP.", "WHISPER", "Common", playerName)
 	else local DKP = GetDKP(main_character_name)
 		SendChatMessage(playerName .. ", you have " .. DKP .. " DKP.", "WHISPER", "Common", playerName)

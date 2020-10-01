@@ -7,6 +7,8 @@ AAAUI:RegisterForDrag("LeftButton")
 AAAUI:SetScript("OnDragStart", AAAUI.StartMoving)
 AAAUI:SetScript("OnDragStop", AAAUI.StopMovingOrSizing)
 
+
+
 AAAUI.scrollframe = CreateFrame("ScrollFrame", "AAAScrollFrame", AAAUI, "UIPanelScrollFrameTemplate");
 AAAUI.scrollchild = CreateFrame("Frame");
 AAAUI.scrollchild:SetPoint("BOTTOM", 0, 0)
@@ -112,7 +114,7 @@ function WipeShit()
 end
 
 StaticPopupDialogs["WIPE_DKP"] = {
-  text = "You sure you want to wipe DKP & roster?",
+  text = "You sure you want to wipe everyone's DKP?",
 	button1 = "Accept",
 	button2 = "Cancel",
 	timeout = 0,
@@ -146,7 +148,10 @@ StaticPopupDialogs["ADJUST_DKP"] = {
 	timeout = 0,
 	hideOnEscape = true,
 	OnShow = function (self, playerName)
-    	self.editBox:SetText("")   
+    	self.editBox:SetText("") 
+    	self.editBox:SetScript("OnEscapePressed", function(self)
+ self:GetParent():Hide()
+end)    
 	end,
 	OnAccept = function(self, playerName)
 	local number = self.editBox:GetText()
@@ -467,6 +472,40 @@ AAAUI:HookScript("OnEvent", function()
 end)
 
 
+CurrentBiddingItem = CreateFrame("Frame", "CurrentBiddingItemFrame", UIParent, "GlowBoxTemplate")
+CurrentBiddingItem:SetSize(40, 40)
+CurrentBiddingItem:SetPoint("CENTER", UIParent, "CENTER", 200)
+CurrentBiddingItem:SetMovable(true)
+CurrentBiddingItem:EnableMouse(true)
+CurrentBiddingItem:RegisterForDrag("LeftButton")
+CurrentBiddingItem:SetScript("OnDragStart", CurrentBiddingItem.StartMoving)
+CurrentBiddingItem:SetScript("OnDragStop", CurrentBiddingItem.StopMovingOrSizing)
 
+CurrentBiddingItemTexture = CurrentBiddingItem:CreateTexture("$parentTexture", "ARTWORK")
+CurrentBiddingItemTexture:SetAllPoints()
 
+CurrentBiddingItem:RegisterEvent("PLAYER_ENTERING_WORLD")
+CurrentBiddingItem:HookScript("OnEvent", function()
+	CurrentBiddingItem:Hide()end)
+
+function CreateImportFrame()
+local ImportFrame = CreateFrame("ScrollFrame", nil, UIParent, "UIPanelScrollFrameTemplate")
+ImportFrame:SetSize(300,200)
+ImportFrame:SetPoint("CENTER")
+local ImportFrameEditBox = CreateFrame("EditBox", nil, ImportFrame)
+ImportFrameEditBox:SetMultiLine(true)
+ImportFrameEditBox:SetFontObject(ChatFontNormal)
+ImportFrameEditBox:SetWidth(300)
+ImportFrame:SetScrollChild(ImportFrameEditBox)
+ImportFrameEditBox:HighlightText()
+ImportFrameEditBox:SetText("")
+
+ImportFrameEditBox:SetScript("OnEscapePressed", function()
+	ImportFrame:Hide()
+end)
+ImportFrameEditBox:SetScript("OnEnterPressed", function()
+	local list = ImportFrameEditBox:GetText()
+	ImportDKPFromSheet(list)
+end)
+end
 

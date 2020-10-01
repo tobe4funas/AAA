@@ -261,23 +261,21 @@ function RemoveGuild(playerName)
 end
 
 function MakeAnAlt(playerName, main_character_name)
-	local alt_count = #rosterDetails[main_character_name]["alts"] + 1
-	rosterDetails[playerName]["is_an_alt"] = true
-	rosterDetails[playerName]["main"] = main_character_name
-	table.insert(rosterDetails[main_character_name]["alts"], alt_count, playerName)
-	for i = 1, #rosterGuild do
-		if rosterGuild[i] == playerName
-			then index = i
-			break
+	if rosterDetails[playerName] ~= nil then
+		local alt_count = #rosterDetails[main_character_name]["alts"] + 1
+		rosterDetails[playerName]["is_an_alt"] = true
+		rosterDetails[playerName]["main"] = main_character_name
+		table.insert(rosterDetails[main_character_name]["alts"], alt_count, playerName)
+		for i = 1, #rosterGuild do
+			if rosterGuild[i] == playerName
+				then index = i
+				break
+			end
 		end
+		table.remove(rosterGuild, index)
+		UpdateDisplay(false)
+	else print("Incorrect name.")
 	end
-	table.remove(rosterGuild, index)
-	UpdateDisplay(false)
-end
-
-function RoundNumbers(num, decimals)
-	local mult = 10^(decimals)
-	return math.floor(num * mult + 0.5) / mult
 end
 
 function UpdateAttendance()
@@ -367,6 +365,38 @@ end
 
 function OpenAAAFrame()
 	AAAUI:Show()
+end
+
+function RoundNumbers(number)
+	number = math.floor(number)
+	number = number / 10
+	number = math.floor(number)
+	number = number * 10
+	return number
+end
+
+function ImportDKPFromSheet(list)
+	if list ~= nil then 
+    local list_names = { }
+    local list_dkp = {}
+    for x in string.gmatch(list, "(%a+)") do
+		table.insert(list_names, x)
+	end
+	for y in string.gmatch(list, "(%d+)") do
+		table.insert (list_dkp, y)
+    end
+
+    for i = 1, #rosterGuild do
+    	for j = 1, #list_names do
+    		if rosterGuild[i] == list_names[j] then
+    			rosterDetails[rosterGuild[i]]["DKP"] = tonumber(list_dkp[j])
+    		end
+    	end
+    end
+    UpdateDisplay()
+    print("Import complete.")
+	else print("Nothing to import.")
+	end
 end
 
 
