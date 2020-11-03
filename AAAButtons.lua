@@ -110,13 +110,13 @@ AAAUI.addRaidDKPBtn:SetScript("OnClick", function()
 	AdjustRaidDKP(number, reason)
 end)
 
-AAAUI.printBtn = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
-AAAUI.printBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 30);
-AAAUI.printBtn:SetSize(140, 40);
-AAAUI.printBtn:SetText("Refresh roster");
-AAAUI.printBtn:SetNormalFontObject("GameFontNormalLarge");
-AAAUI.printBtn:SetHighlightFontObject("GameFontHighlightLarge");
-AAAUI.printBtn:SetScript("OnClick", function()
+AAAUI.refreshBtn = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
+AAAUI.refreshBtn:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 30);
+AAAUI.refreshBtn:SetSize(140, 40);
+AAAUI.refreshBtn:SetText("Refresh roster");
+AAAUI.refreshBtn:SetNormalFontObject("GameFontNormalLarge");
+AAAUI.refreshBtn:SetHighlightFontObject("GameFontHighlightLarge");
+AAAUI.refreshBtn:SetScript("OnClick", function()
 	UpdateDisplay(true)end)
 
 AAAUI.wipeRosterBtn = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
@@ -138,29 +138,71 @@ AAAUI.ImportBtn1:SetScript("OnClick", CreateImportFrame)
 AAAUI.testBtn1 = CreateFrame("Button", nil, AAAUI, "GameMenuButtonTemplate");
 AAAUI.testBtn1:SetPoint("CENTER", AAAUI, "BOTTOM", 350, 450);
 AAAUI.testBtn1:SetSize(140, 40);
-AAAUI.testBtn1:SetText("Test2");
+AAAUI.testBtn1:SetText("Test");
 AAAUI.testBtn1:SetNormalFontObject("GameFontNormalLarge");
 AAAUI.testBtn1:SetHighlightFontObject("GameFontHighlightLarge");
 AAAUI.testBtn1:SetScript("OnClick", TestFunction)
 
 CurrentBiddingItem.nextStep = CreateFrame("Button", nil, CurrentBiddingItem, "GameMenuButtonTemplate");
-CurrentBiddingItem.nextStep:SetPoint("LEFT", CurrentBiddingItem, "LEFT", -50, 18);
+CurrentBiddingItem.nextStep:SetPoint("LEFT", CurrentBiddingItem, "LEFT", -50, 4);
 CurrentBiddingItem.nextStep:SetSize(50, 40);
 CurrentBiddingItem.nextStep:SetText("Next");
 CurrentBiddingItem.nextStep:SetNormalFontObject("GameFontNormalSmall");
 CurrentBiddingItem.nextStep:SetHighlightFontObject("GameFontHighlightSmall");
 CurrentBiddingItem.nextStep:SetScript("OnClick", function()
 	EndTimers()
-	BiddingTimerHasEnded()end)
+	BiddingTimerHasEnded()
+end)
 
 CurrentBiddingItem.Cancel = CreateFrame("Button", nil, CurrentBiddingItem, "GameMenuButtonTemplate");
-CurrentBiddingItem.Cancel:SetPoint("LEFT", CurrentBiddingItem, "LEFT", -50, -18);
+CurrentBiddingItem.Cancel:SetPoint("LEFT", CurrentBiddingItem, "LEFT", -50, -32);
 CurrentBiddingItem.Cancel:SetSize(50, 40);
 CurrentBiddingItem.Cancel:SetText("Cancel");
 CurrentBiddingItem.Cancel:SetNormalFontObject("GameFontNormalSmall");
 CurrentBiddingItem.Cancel:SetHighlightFontObject("GameFontHighlightSmall");
 CurrentBiddingItem.Cancel:SetScript("OnClick", function()
-	BiddingSequenceCanceled("been canceled.")end)
+	BiddingSequenceCanceled("been canceled.")
+end)
+
+CurrentBiddingItem.Extend = CreateFrame("Button", nil, CurrentBiddingItem, "GameMenuButtonTemplate");
+CurrentBiddingItem.Extend:SetPoint("LEFT", CurrentBiddingItem, "LEFT", -50, -68);
+CurrentBiddingItem.Extend:SetSize(50, 40);
+CurrentBiddingItem.Extend:SetText("Extend");
+CurrentBiddingItem.Extend:SetNormalFontObject("GameFontNormalSmall");
+CurrentBiddingItem.Extend:SetHighlightFontObject("GameFontHighlightSmall");
+CurrentBiddingItem.Extend:SetScript("OnClick", function()
+	RefreshTimers()
+end)
+
+CurrentBiddingItem.Undo = CreateFrame("Button", nil, CurrentBiddingItem, "GameMenuButtonTemplate");
+CurrentBiddingItem.Undo:SetPoint("LEFT", CurrentBiddingItem, "LEFT", -50, -104);
+CurrentBiddingItem.Undo:SetSize(50, 40);
+CurrentBiddingItem.Undo:SetText("Undo");
+CurrentBiddingItem.Undo:SetNormalFontObject("GameFontNormalSmall");
+CurrentBiddingItem.Undo:SetHighlightFontObject("GameFontHighlightSmall");
+CurrentBiddingItem.Undo:SetScript("OnClick", function()
+	UndoLastBid()
+	RefreshTimers()
+end)
+
+CurrentBiddingItem.Reset = CreateFrame("Button", nil, CurrentBiddingItem, "GameMenuButtonTemplate");
+CurrentBiddingItem.Reset:SetPoint("LEFT", CurrentBiddingItem, "LEFT", -50, -140);
+CurrentBiddingItem.Reset:SetSize(50, 40);
+CurrentBiddingItem.Reset:SetText("Reset");
+CurrentBiddingItem.Reset:SetNormalFontObject("GameFontNormalSmall");
+CurrentBiddingItem.Reset:SetHighlightFontObject("GameFontHighlightSmall");
+CurrentBiddingItem.Reset:SetScript("OnClick", function()
+	BiddingSequenceCanceled("been canceled.")
+	ResetBidding()
+end)
+
+CurrentBiddingItem.Close = CreateFrame("Button", nil, CurrentBiddingItem, "UIPanelCloseButton");
+CurrentBiddingItem.Close:SetPoint("LEFT", CurrentBiddingItem, "LEFT", 20, 34);
+CurrentBiddingItem.Close:SetSize(30, 30);
+CurrentBiddingItem.Close:SetScript("OnClick", function()
+	BiddingSequenceCanceled()
+	CloseBiddingControl()
+end)
 
 -- ---------------------------------
 -- -- Sliders

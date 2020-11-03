@@ -53,9 +53,10 @@ function UpdateRoster(database, guildRoster, playerName, class, attendance_start
 	playerInfo["alts"] = {}
 	playerInfo["is_an_alt"] = false
 	playerInfo["main"] = ""
-	playerInfo["attendance_starting"] = attendance_starting
+	playerInfo["attendance_starting"] = attendance_total
 	playerInfo["attendance_total"] = 0
 	playerInfo["attendance_percentage"] = 0
+	playerInfo["guild_status"] = "Trial"
 	if guildRoster == nil then guildRoster[1] = playerName
 	else guildRoster[#guildRoster + 1] = playerName
 	end
@@ -177,26 +178,11 @@ function ExportChangelog(changelog)
 	CreateExportString(export_string)
 end
 
-function MemberStatus(playerName)
-	local playerName_rank = nil
-	local member_status = nil
-	for i = 1, GetNumGuildMembers() do
-		local guild_name, guild_rank = GetGuildRosterInfo(i)
-		if string.gsub(guild_name, "-Noggenfogger", "") == playerName then playerName_rank = guild_rank break end
-	end
-	if playerName_rank == "Trial" or playerName_rank == "Alt/Social" then member_status = "Trial"
-	elseif rosterDetails[playerName]["attendance_percentage"] >= 75 then member_status = "Core"
-	else member_status = "Casual"
-	end
-	return member_status
-end
-
 function ExportRoster(database, guildRoster)
-	local member_status = MemberStatus(guildRoster[1])
-	local export_string_in_progress = guildRoster[1] .. " " .. database[guildRoster[1]]["DKP"] .. " " .. database[guildRoster[1]]["class"] .. " " .. member_status .. " " .. database[guildRoster[1]]["attendance_percentage"] .. " " .. database[guildRoster[1]]["attendance_total"]
+	CalculateAttendance()
+	local export_string_in_progress = guildRoster[1] .. " " .. database[guildRoster[1]]["DKP"] .. " " .. database[guildRoster[1]]["class"] .. " " .. database[guildRoster[1]]["guild_status"] .. " " .. database[guildRoster[1]]["attendance_percentage"] .. " " .. database[guildRoster[1]]["attendance_total"]
 	for i = 2, #guildRoster do
-		member_status = MemberStatus(guildRoster[i])
-		export_string_in_progress = export_string_in_progress .. "\n" .. guildRoster[i] .. " " .. database[guildRoster[i]]["DKP"] .. " " .. database[guildRoster[i]]["class"] .. " " .. member_status .. " " .. database[guildRoster[i]]["attendance_percentage"] .. " " .. database[guildRoster[i]]["attendance_total"]
+		export_string_in_progress = export_string_in_progress .. "\n" .. guildRoster[i] .. " " .. database[guildRoster[i]]["DKP"] .. " " .. database[guildRoster[i]]["class"] .. " " .. database[guildRoster[i]]["guild_status"] .. " " .. database[guildRoster[i]]["attendance_percentage"] .. " " .. database[guildRoster[i]]["attendance_total"]
 	end
 	export_string = tostring(export_string_in_progress)
 	CreateExportString(export_string)
@@ -279,14 +265,35 @@ function MakeAnAlt(playerName, main_character_name)
 end
 
 function UpdateAttendance()
+	local is_an_alt = nil
+	local main_character_name = nil
 	attendance_total = attendance_total + 1
 	for i = 1, #rosterRaidClone do
-		rosterDetails[rosterRaidClone[i]]["attendance_total"] = rosterDetails[rosterRaidClone[i]]["attendance_total"] + 1
+		is_an_alt, main_character_name = IsAnAlt(rosterRaidClone[i])
+		if is_an_alt == false then
+			rosterDetails[rosterRaidClone[i]]["attendance_total"] = rosterDetails[rosterRaidClone[i]]["attendance_total"] + 1
+		else 
+			rosterDetails[main_character_name]["attendance_total"] = rosterDetails[main_character_name]["attendance_total"] + 1
+		end
 	end
 	for i = 1, #rosterGuild do
-		rosterDetails[rosterGuild[i]]["attendance_percentage"] = rosterDetails[rosterGuild[i]]["attendance_total"] / (attendance_total - rosterDetails[rosterGuild[i]]["attendance_starting"]) * 100
-		local num = rosterDetails[rosterGuild[i]]["attendance_percentage"]
-		rosterDetails[rosterGuild[i]]["attendance_percentage"] = RoundNumbers(num, 0)
+		local is_an_alt = IsAnAlt(rosterGuild[i])
+		if is_an_alt == false then
+			rosterDetails[rosterGuild[i]]["attendance_percentage"] = rosterDetails[rosterGuild[i]]["attendance_total"] / (attendance_total - rosterDetails[rosterGuild[i]]["attendance_starting"]) * 100
+			local num = rosterDetails[rosterGuild[i]]["attendance_percentage"]
+			rosterDetails[rosterGuild[i]]["attendance_percentage"] = RoundNumbers(num, 0)
+		end
+	end
+end
+
+function CalculateAttendance()
+	for i = 1, #rosterGuild do
+		local is_an_alt = IsAnAlt(rosterGuild[i])
+		if is_an_alt == false then
+			rosterDetails[rosterGuild[i]]["attendance_percentage"] = rosterDetails[rosterGuild[i]]["attendance_total"] / (attendance_total - rosterDetails[rosterGuild[i]]["attendance_starting"]) * 100
+			local num = rosterDetails[rosterGuild[i]]["attendance_percentage"]
+			rosterDetails[rosterGuild[i]]["attendance_percentage"] = RoundNumbers(num, 0)
+		end
 	end
 end
 
@@ -303,12 +310,11 @@ end
 
 function AdjustRaidDKP(number, reason)
 	for i = 1, #rosterRaidClone do
-		local is_an_alt = IsAnAlt(rosterRaidClone[i])
+		local is_an_alt, main_character_name = IsAnAlt(rosterRaidClone[i])
 		if is_an_alt == false then
 			rosterDetails[rosterRaidClone[i]]["DKP"] = rosterDetails[rosterRaidClone[i]]["DKP"] + number
 			changelog_dkp[#changelog_dkp + 1] = rosterRaidClone[i] .. " " .. number .. " " .. reason
 		else 
-			local main_character_name = rosterDetails[rosterRaidClone[i]]["main"]
 			rosterDetails[main_character_name]["DKP"] = rosterDetails[main_character_name]["DKP"] + number
 			changelog_dkp[#changelog_dkp + 1] = main_character_name .. " " .. number .. " " .. reason
 		end
@@ -319,17 +325,6 @@ function AdjustRaidDKP(number, reason)
 	AAAUI.editBox1:ClearFocus()
 	AAAUI.editBox2:ClearFocus()
 	UpdateDisplay(true)
-end
-
-function IsInList(playerName, list)
-	local is_in_list = false
-	for i = 1, #list do
-		if playerName == list[i] then
-			is_in_list = true
-			break
-		end
-	end
-	return is_in_list
 end
 
 function RefreshChangelogs(changelog)
@@ -354,9 +349,7 @@ function GetGuildRank(playerName)
 end
 
 function AddToRaid(playerName)
-	print(playerName)
 	local is_in_raid = IsInRaidRoster(playerName)
-	print(is_in_raid)
 	if is_in_raid == false then
 		table.insert(rosterRaid, playerName)
 		UpdateDisplay(true)
@@ -377,28 +370,89 @@ end
 
 function ImportDKPFromSheet(list)
 	if list ~= nil then 
-    local list_names = { }
-    local list_dkp = {}
-    for x in string.gmatch(list, "(%a+)") do
-		table.insert(list_names, x)
-	end
-	for y in string.gmatch(list, "(%d+)") do
-		table.insert (list_dkp, y)
-    end
+	    local list_names = { }
+	    local list_dkp = {}
+	    for x in string.gmatch(list, "(%a+)") do
+			table.insert(list_names, x)
+		end
+		for y in string.gmatch(list, "(%d+)") do
+			table.insert (list_dkp, y)
+	    end
 
-    for i = 1, #rosterGuild do
-    	for j = 1, #list_names do
-    		if rosterGuild[i] == list_names[j] then
-    			rosterDetails[rosterGuild[i]]["DKP"] = tonumber(list_dkp[j])
-    		end
-    	end
-    end
-    UpdateDisplay()
-    print("Import complete.")
+	    for i = 1, #rosterGuild do
+	    	for j = 1, #list_names do
+	    		if rosterGuild[i] == list_names[j] then
+	    			rosterDetails[rosterGuild[i]]["DKP"] = tonumber(list_dkp[j])
+	    		end
+	    	end
+	    end
+	    test_variable = list_names
+    	UpdateDisplay()
+    	print("Import complete.")
 	else print("Nothing to import.")
 	end
 end
 
+function CalculateHighestBidder(bidders_list, bidding_lists, highest_bid)
+	local winners = {}
+	if bidders_list[1] ~= nil then 
+		for i = 1, #bidders_list do
+			if bidding_lists[bidders_list[i]] > highest_bid then
+				winners = {}
+				table.insert(winners, bidders_list[i])
+				highest_bid = bidding_lists[bidders_list[i]]
+			elseif bidding_lists[bidders_list[i]] == highest_bid then
+				table.insert(winners, bidders_list[i])
+			end
+		end
+	end
+	return winners, highest_bid
+end
 
 
+function UpdateCurrentBidders(playerName, playerName_bid, bidders_list, their_bids)
+	local is_in_list = false
+	for i = 1, #bidders_list do
+		if playerName == bidders_list[i] then is_in_list = true break end
+	end
+	if is_in_list == false then bidders_list[#bidders_list + 1] = playerName end
+	their_bids[playerName] = playerName_bid
+	return bidders_list, their_bids
+end
 
+function IsBidEligible(playerName, new_bid, biddings_list, highest_bid, BiddingOnHold, MSbidding, OSbidding)
+	local is_an_alt = IsAnAlt(playerName)
+	local DKP = GetDKP(playerName)
+	local playerName_rank = GetGuildRank(playerName)
+	local is_all_in = false
+	local reason = nil
+	local is_bid_eligible = false
+	local is_bid_bimbo_eligible = false
+	if new_bid < DKP then new_bid = RoundNumbers(new_bid)
+	elseif new_bid == DKP then is_all_in = true end
+	-- ar isvis priimu bid?
+	if BiddingOnHold == false and (OSbidding == true or (MSbidding == true and (playerName_rank == "Officer" or playerName_rank == "Guardian" or playerName_rank == "Member"))) then
+		if (new_bid >= (highest_bid + 10) or (new_bid > highest_bid and is_all_in == true)) and DKP >= new_bid then
+			is_bid_eligible = true
+		elseif (highest_bid % 2 ~= 0) and (new_bid >= (highest_bid + 5) or (new_bid > highest_bid and is_all_in == true)) and DKP >= new_bid then
+			is_bid_eligible = true
+		elseif new_bid == highest_bid and highest_bid > 10 and DKP >= new_bid then
+			is_bid_eligible = true
+		elseif (new_bid >= (highest_bid + 10) or (new_bid > highest_bid and is_all_in == true)) and biddings_list[2] ~= nil then
+			is_bid_eligible = true
+		elseif DKP < 20 and biddings_list[1] == nil then
+			is_bid_bimbo_eligible = true
+		elseif new_bid < (highest_bid + 10) and DKP >= new_bid then
+			reason = "bid is too low."
+		elseif DKP < new_bid then
+			reason = "insufficient DKP."
+		end
+	else reason = "your guild status is too low."
+	end
+	print(new_bid)
+	return is_bid_eligible, is_bid_bimbo_eligible, reason, new_bid
+end
+
+function ChangeGuildStatus(playerName, new_status)
+	rosterDetails[playerName]["guild_status"] = new_status
+end

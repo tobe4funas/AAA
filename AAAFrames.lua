@@ -70,11 +70,13 @@ local raider_x = 40
 local dkp_x = 170
 local class_x = 220
 local alts_x = 280
-local attendance_x = 400
+local attendance_x = 380
 local lastcount_x = 500
 local lastraider_x = 545
 local lastclass_x = 670
 
+local AllBiddingItems = {}
+local AllBiddingItemsTexture = {}
 
 
 
@@ -109,6 +111,8 @@ function WipeShit()
 	changelog_items = {}
 	for i = 1, #rosterGuild do
 		rosterDetails[rosterGuild[i]]["DKP"] = 0
+		rosterDetails[rosterGuild[i]]["attendance_total"] = 0
+		attendance_total = 0
 	end
 	UpdateDisplay(false)
 end
@@ -233,7 +237,7 @@ function RenderDisplay(database, guildRoster, raidRoster, raidRosterClone, guild
 		display_raider_fontstring[i]:SetText(guildRoster[i])
 		display_dkp_fontstring[i]:SetText(database[guildRoster[i]]["DKP"])
 		display_class_fontstring[i]:SetText(database[guildRoster[i]]["class"])
-		display_attendance_fontstring[i]:SetText(database[guildRoster[i]]["attendance_percentage"] .. "%")
+		display_attendance_fontstring[i]:SetText(database[guildRoster[i]]["guild_status"] .. " / " .. database[guildRoster[i]]["attendance_percentage"] .. "%")
 		display_count_fontstring[i]:SetText(i)
 
 		local r, g, b, t = GetClassColorText(guildRoster[i], database)
@@ -280,7 +284,7 @@ function CreateDisplay(database, guildRoster, raidRoster, raidRosterClone, chang
 			display_attendance[i]:SetHeight(13)
 			display_count[i]:SetHeight(13)		
 
-			display_raider[i]:SetWidth(400)
+			display_raider[i]:SetWidth(450)
 			display_dkp[i]:SetWidth(50)
 			display_class[i]:SetWidth(60)
 			display_alts[i]:SetWidth(120)
@@ -317,7 +321,7 @@ function CreateDisplay(database, guildRoster, raidRoster, raidRosterClone, chang
 			display_raider_fontstring[i]:SetText(guildRoster[i])
 			display_dkp_fontstring[i]:SetText(database[guildRoster[i]]["DKP"])
 			display_class_fontstring[i]:SetText(database[guildRoster[i]]["class"])
-			display_attendance_fontstring[i]:SetText(database[guildRoster[i]]["attendance_percentage"] .. "%")
+			display_attendance_fontstring[i]:SetText(database[guildRoster[i]]["guild_status"] .. " / " .. database[guildRoster[i]]["attendance_percentage"] .. "%")
 			display_count_fontstring[i]:SetText(i)
 
 			local r, g, b, t = GetClassColorText(guildRoster[i], database)
@@ -333,7 +337,7 @@ function CreateDisplay(database, guildRoster, raidRoster, raidRosterClone, chang
 
 			guild_height = guild_height - 15
 
-			function OnClickDoRemoveGuild()
+			function OnClickDoRemoveGuild(i)
 				if display_raider_fontstring[i]:GetText() ~= nil then
 				local playerName = display_raider_fontstring[i]:GetText()
 				PopupRemoveGuild(playerName)
@@ -361,12 +365,30 @@ function CreateDisplay(database, guildRoster, raidRoster, raidRosterClone, chang
 				end
 			end
 
+			function OnClickDoChangeGuildStatus(i, new_status)
+				if display_raider_fontstring[i]:GetText() ~= nil then
+					local playerName = display_raider_fontstring[i]:GetText()
+					ChangeGuildStatus(playerName, new_status)
+					CloseDropDownMenus()
+					UpdateDisplay(false)
+				end
+			end
+
+
 			local menu = {
 			    { text = guildRoster[i], isTitle = true},
 			    { text = "Adjust DKP", func = function() OnClickDoDKP(i); end },
 			    { text = "Make an Alt", func = function() OnClickDoMakeAnAlt(i); end },
 			    { text = "Remove from roster", func = function() OnClickDoRemoveGuild(i); end },
 			    { text = "Add to raid", func = function() OnClickDoAddRaid(i); end },
+			    { text = "Change guild status", hasArrow = true,
+			    	menuList = {
+			    		{ text = "Trial", func = function() OnClickDoChangeGuildStatus(i, "Trial"); end },
+			    		{ text = "Random", func = function() OnClickDoChangeGuildStatus(i, "Random"); end },
+			    		{ text = "Casual", func = function() OnClickDoChangeGuildStatus(i, "Casual"); end },
+			    		{ text = "Core", func = function() OnClickDoChangeGuildStatus(i, "Core"); end },
+			    	}
+			    }
 			}
 
 			display_raider[i]:SetScript("OnClick", function()
@@ -471,23 +493,6 @@ AAAUI:HookScript("OnEvent", function()
 	CreateDisplay(rosterDetails, rosterGuild, rosterRaid, rosterRaidClone, changelog_dkp, -30, -30)
 end)
 
-
-CurrentBiddingItem = CreateFrame("Frame", "CurrentBiddingItemFrame", UIParent, "GlowBoxTemplate")
-CurrentBiddingItem:SetSize(40, 40)
-CurrentBiddingItem:SetPoint("CENTER", UIParent, "CENTER", 200)
-CurrentBiddingItem:SetMovable(true)
-CurrentBiddingItem:EnableMouse(true)
-CurrentBiddingItem:RegisterForDrag("LeftButton")
-CurrentBiddingItem:SetScript("OnDragStart", CurrentBiddingItem.StartMoving)
-CurrentBiddingItem:SetScript("OnDragStop", CurrentBiddingItem.StopMovingOrSizing)
-
-CurrentBiddingItemTexture = CurrentBiddingItem:CreateTexture("$parentTexture", "ARTWORK")
-CurrentBiddingItemTexture:SetAllPoints()
-
-CurrentBiddingItem:RegisterEvent("PLAYER_ENTERING_WORLD")
-CurrentBiddingItem:HookScript("OnEvent", function()
-	CurrentBiddingItem:Hide()end)
-
 function CreateImportFrame()
 local ImportFrame = CreateFrame("ScrollFrame", nil, UIParent, "UIPanelScrollFrameTemplate")
 ImportFrame:SetSize(300,200)
@@ -509,3 +514,73 @@ ImportFrameEditBox:SetScript("OnEnterPressed", function()
 end)
 end
 
+
+
+
+CurrentBiddingItem = CreateFrame("Frame", "CurrentBiddingItemFrame", UIParent, "GlowBoxTemplate")
+CurrentBiddingItem:SetSize(40, 40)
+CurrentBiddingItem:SetPoint("CENTER", UIParent, "CENTER", 200)
+CurrentBiddingItem:SetMovable(true)
+CurrentBiddingItem:EnableMouse(true)
+CurrentBiddingItem:RegisterForDrag("LeftButton")
+CurrentBiddingItem:SetScript("OnDragStart", CurrentBiddingItem.StartMoving)
+CurrentBiddingItem:SetScript("OnDragStop", CurrentBiddingItem.StopMovingOrSizing)
+
+CurrentBiddingItemTexture = CurrentBiddingItem:CreateTexture("$parentTexture", "ARTWORK")
+CurrentBiddingItemTexture:SetAllPoints()
+
+function CreateBiddingControlFrames()
+	local j = 0
+	for i = 1, 5 do
+		AllBiddingItems[i] = CreateFrame("Button", nil, UIParent, "GlowBoxTemplate")
+		AllBiddingItems[i]:SetSize(40, 40)
+		AllBiddingItems[i]:SetMovable(false)
+		AllBiddingItems[i]:SetPoint("CENTER", CurrentBiddingItem, "CENTER", 42, j)
+		AllBiddingItemsTexture[i] = AllBiddingItems[i]:CreateTexture("$parentTexture", "ARTWORK")
+		AllBiddingItemsTexture[i]:SetAllPoints()
+		j = j - 40
+
+		function OnClickDoBiddingItemList(index)
+			BiddingSequenceSpecificItem(index)
+		end
+		AllBiddingItems[i]:SetScript("OnClick", function()
+			OnClickDoBiddingItemList(i) end)
+	end
+end
+
+function UpdateBiddingControlCurrentItem(item_name)
+	CurrentBiddingItem:Show()
+	local bidding_item_ID, _, _, _, bidding_item_icon = GetItemInfoInstant(item_name)
+	local bidding_item_link = GetItemInfo(bidding_item_ID)
+	CurrentBiddingItemTexture:SetTexture(bidding_item_icon)
+end
+
+CurrentBiddingItem:RegisterEvent("PLAYER_ENTERING_WORLD")
+CurrentBiddingItem:HookScript("OnEvent", function()
+	CreateBiddingControlFrames()
+	CurrentBiddingItem:Hide()
+	for i = 1, 5 do
+		AllBiddingItems[i]:Hide()
+	end 
+end)
+
+function UpdateBiddingControlAllItems(item_list)
+	for i = 1, #item_list do
+		local bidding_item_ID, _, _, _, bidding_item_icon = GetItemInfoInstant(item_list[i])
+		local bidding_item_link = GetItemInfo(bidding_item_ID)
+		AllBiddingItemsTexture[i]:SetTexture(bidding_item_icon)	
+	end
+	for i = 1, 5 do
+		if AllBiddingItemsTexture[i]:GetTexture() == nil then
+			AllBiddingItems[i]:Hide()
+		else AllBiddingItems[i]:Show()
+		end
+	end
+end
+
+function CloseBiddingControl()
+	CurrentBiddingItem:Hide()
+	for i = 1, 5 do
+		AllBiddingItems[i]:Hide()
+	end
+end
