@@ -564,7 +564,14 @@ CurrentBiddingItem:HookScript("OnEvent", function()
 	end 
 end)
 
+function ResetBiddingControlAllItems()
+	for i = 1, 5 do
+		AllBiddingItemsTexture[i]:SetTexture("")
+	end
+end
+
 function UpdateBiddingControlAllItems(item_list)
+	ResetBiddingControlAllItems()
 	for i = 1, #item_list do
 		local bidding_item_ID, _, _, _, bidding_item_icon = GetItemInfoInstant(item_list[i])
 		local bidding_item_link = GetItemInfo(bidding_item_ID)
@@ -574,6 +581,59 @@ function UpdateBiddingControlAllItems(item_list)
 		if AllBiddingItemsTexture[i]:GetTexture() == nil then
 			AllBiddingItems[i]:Hide()
 		else AllBiddingItems[i]:Show()
+		end
+	end
+	CurrentBiddingItem:Show()
+end
+
+local bidders = {}
+local bidders_fontstring = {}
+
+function CreateBiddingControlBidders(MSbidders, OSbidders, MSfreeloaders, OSfreeloaders, bidders_bids, all_bidders)
+	local bidders_height = 0
+	for i = 1, 20 do
+		bidders[i] = CreateFrame("Button", nil, CurrentBiddingItem)
+		bidders[i]:SetHeight(13)
+		bidders[i]:SetWidth(100)
+		bidders[i]:SetPoint("TOPLEFT", 90, bidders_height)
+		bidders[i]:SetHighlightTexture("Interface/FriendsFrame/UI-FriendsFrame-HighlightBar", "ADD")
+		bidders_fontstring[i] = bidders[i]:CreateFontString(CurrentBiddingItem, "OVERLAY", "GameTooltipText")
+		bidders_fontstring[i]:SetPoint("LEFT", 0, 0)
+		bidders_fontstring[i]:SetText("")
+
+		bidders_height = bidders_height - 15
+
+		function OnClickDoRemoveBidder()
+			local keywords = {}
+			local text = bidders_fontstring[i]:GetText()
+			local i = 1
+			for words in text:gmatch("%S+") do
+				keywords[i] = words
+				i = i + 1
+			end
+			local name_to_remove = keywords[1]
+			RemoveBidder(name_to_remove)
+		end
+
+		bidders[i]:SetScript("OnClick", OnClickDoRemoveBidder)
+	end
+end
+
+function ResetBiddingControlBidders()
+	for i = 1, 20 do
+		bidders_fontstring[i]:SetText("")
+	end
+end
+
+function UpdateBiddingControlBidders(bidders_list, bids_list, priority)
+	ResetBiddingControlBidders()
+	for i = 1, #bidders_list do
+		bidders_fontstring[i]:SetText(bidders_list[i] .. " " .. bids_list[bidders_list[i]] .. " " .. priority[bidders_list[i]])
+		bidders[i]:Show()
+	end
+	for i = 1, 20 do
+		if bidders_fontstring[i]:GetText() == nil then
+			bidders[i]:Hide()
 		end
 	end
 end

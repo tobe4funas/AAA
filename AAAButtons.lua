@@ -164,25 +164,22 @@ CurrentBiddingItem.Cancel:SetScript("OnClick", function()
 	BiddingSequenceCanceled("been canceled.")
 end)
 
-CurrentBiddingItem.Extend = CreateFrame("Button", nil, CurrentBiddingItem, "GameMenuButtonTemplate");
-CurrentBiddingItem.Extend:SetPoint("LEFT", CurrentBiddingItem, "LEFT", -50, -68);
-CurrentBiddingItem.Extend:SetSize(50, 40);
-CurrentBiddingItem.Extend:SetText("Extend");
-CurrentBiddingItem.Extend:SetNormalFontObject("GameFontNormalSmall");
-CurrentBiddingItem.Extend:SetHighlightFontObject("GameFontHighlightSmall");
-CurrentBiddingItem.Extend:SetScript("OnClick", function()
-	RefreshTimers()
-end)
-
-CurrentBiddingItem.Undo = CreateFrame("Button", nil, CurrentBiddingItem, "GameMenuButtonTemplate");
-CurrentBiddingItem.Undo:SetPoint("LEFT", CurrentBiddingItem, "LEFT", -50, -104);
-CurrentBiddingItem.Undo:SetSize(50, 40);
-CurrentBiddingItem.Undo:SetText("Undo");
-CurrentBiddingItem.Undo:SetNormalFontObject("GameFontNormalSmall");
-CurrentBiddingItem.Undo:SetHighlightFontObject("GameFontHighlightSmall");
-CurrentBiddingItem.Undo:SetScript("OnClick", function()
-	UndoLastBid()
-	RefreshTimers()
+CurrentBiddingItem.PauseResume = CreateFrame("Button", nil, CurrentBiddingItem, "GameMenuButtonTemplate");
+CurrentBiddingItem.PauseResume:SetPoint("LEFT", CurrentBiddingItem, "LEFT", -50, -68);
+CurrentBiddingItem.PauseResume:SetSize(50, 40);
+CurrentBiddingItem.PauseResume:SetText("Pause");
+CurrentBiddingItem.PauseResume:SetNormalFontObject("GameFontNormalSmall");
+CurrentBiddingItem.PauseResume:SetHighlightFontObject("GameFontHighlightSmall");
+CurrentBiddingItem.PauseResume:SetScript("OnClick", function()
+	if CurrentBiddingItem.PauseResume:GetText() == "Pause" then
+		EndTimers()
+		SendChatMessage("--------- BIDDING TIMER IS PAUSED, YOU CAN CONTINUE BIDDING ---------", "RAID")
+		CurrentBiddingItem.PauseResume:SetText("Resume")
+	elseif CurrentBiddingItem.PauseResume:GetText() == "Resume" then
+		StartTimers()
+		SendChatMessage("--------- BIDDING TIMER RESUMED ---------", "RAID")
+		CurrentBiddingItem.PauseResume:SetText("Pause")
+	end
 end)
 
 CurrentBiddingItem.Reset = CreateFrame("Button", nil, CurrentBiddingItem, "GameMenuButtonTemplate");

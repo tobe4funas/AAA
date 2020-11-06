@@ -393,66 +393,98 @@ function ImportDKPFromSheet(list)
 	end
 end
 
-function CalculateHighestBidder(bidders_list, bidding_lists, highest_bid)
+-- sitas visiskai dar neveikia
+function CalculateHighestBid(list, bids)
 	local winners = {}
-	if bidders_list[1] ~= nil then 
-		for i = 1, #bidders_list do
-			if bidding_lists[bidders_list[i]] > highest_bid then
-				winners = {}
-				table.insert(winners, bidders_list[i])
-				highest_bid = bidding_lists[bidders_list[i]]
-			elseif bidding_lists[bidders_list[i]] == highest_bid then
-				table.insert(winners, bidders_list[i])
-			end
+	local winning_bid = 10
+	local index = nil
+	for i = 1, #list do
+		if bids[list[i]] > winning_bid then
+			winners = {}
+			winners[1] = list[i]
+			winning_bid = bids[list[i]]
+			index = i
+		elseif bids[list[i]] == winning_bid then
+			table.insert(winners, list[i])
 		end
 	end
-	return winners, highest_bid
-end
-
-
-function UpdateCurrentBidders(playerName, playerName_bid, bidders_list, their_bids)
-	local is_in_list = false
-	for i = 1, #bidders_list do
-		if playerName == bidders_list[i] then is_in_list = true break end
+	-- jeigu yra tik 1 laimetojas, o dalyviu buvo daugiau nei 1, tai sumoket DKP maziau turi nei bidino
+	if winners[2] == nil then
+		local second_highest_bidder = nil
+		local second_highest_bid = 10
+		for i = 1, #list do
+			if bids[list[i]] > second_highest_bid and index ~= i then
+				second_highest_bid = bids[list[i]]
+			end
+		end
+		winning_bid = second_highest_bid + 10
 	end
-	if is_in_list == false then bidders_list[#bidders_list + 1] = playerName end
-	their_bids[playerName] = playerName_bid
-	return bidders_list, their_bids
+	return winners, winning_bid
 end
 
-function IsBidEligible(playerName, new_bid, biddings_list, highest_bid, BiddingOnHold, MSbidding, OSbidding)
+function CalculateWinner(MSbidders, OSbidders, MSfreeloaders, OSfreeloaders, bidders_bids)
+	local winners = {}
+	local winning_bid = 20
+	if MSbidders[1] ~= nil then
+		winners, winning_bid = CalculateHighestBid(MSbidders, bidders_bids)
+	elseif MSfreeloaders[1] ~= nil then
+	 	winners, winning_bid = CalculateHighestBid(MSfreeloaders, bidders_bids)
+	elseif OSbidders[1] ~= nil then
+	 	winners, winning_bid = CalculateHighestBid(OSbidders, bidders_bids)
+	elseif OSfreeloaders[1] ~= nil then
+	 	winners, winning_bid = CalculateHighestBid(OSfreeloaders, bidders_bids)
+	end
+	return winners, winning_bid
+end
+
+function IsBidEligible(playerName, bidding_round, new_bid, BiddingOnHold)
 	local is_an_alt = IsAnAlt(playerName)
 	local DKP = GetDKP(playerName)
 	local playerName_rank = GetGuildRank(playerName)
 	local is_all_in = false
 	local reason = nil
-	local is_bid_eligible = false
-	local is_bid_bimbo_eligible = false
+	local is_bid_MSeligible = false
+	local is_bid_OSeligible = false
+	local is_bid_MSbimbo_eligible = false
+	local is_bid_OSbimbo_eligible = false
 	if new_bid < DKP then new_bid = RoundNumbers(new_bid)
 	elseif new_bid == DKP then is_all_in = true end
 	-- ar isvis priimu bid?
-	if BiddingOnHold == false and (OSbidding == true or (MSbidding == true and (playerName_rank == "Officer" or playerName_rank == "Guardian" or playerName_rank == "Member"))) then
-		if (new_bid >= (highest_bid + 10) or (new_bid > highest_bid and is_all_in == true)) and DKP >= new_bid then
-			is_bid_eligible = true
-		elseif (highest_bid % 2 ~= 0) and (new_bid >= (highest_bid + 5) or (new_bid > highest_bid and is_all_in == true)) and DKP >= new_bid then
-			is_bid_eligible = true
-		elseif new_bid == highest_bid and highest_bid > 10 and DKP >= new_bid then
-			is_bid_eligible = true
-		elseif (new_bid >= (highest_bid + 10) or (new_bid > highest_bid and is_all_in == true)) and biddings_list[2] ~= nil then
-			is_bid_eligible = true
-		elseif DKP < 20 and biddings_list[1] == nil then
-			is_bid_bimbo_eligible = true
-		elseif new_bid < (highest_bid + 10) and DKP >= new_bid then
-			reason = "bid is too low."
+	if BiddingOnHold == false then
+		if DKP >= new_bid and new_bid >= 20 and string.lower(bidding_round) == "!ms" and (playerName_rank == "Officer" or playerName_rank == "Guardian" or playerName_rank == "Member") then
+			is_bid_MSeligible = true
+			reason = "your " .. new_bid .. " DKP MS bid was taken in. You have a total of " .. DKP .. " DKP."
+		elseif DKP >= new_bid and new_bid >= 20 and string.lower(bidding_round) == "!os" then
+			is_bid_OSeligible = true
+			reason = "your " .. new_bid .. " DKP OS bid was taken in. You have a total of " .. DKP .. " DKP."
+		elseif DKP < 20 and string.lower(bidding_round) == "!ms" and (playerName_rank == "Officer" or playerName_rank == "Guardian" or playerName_rank == "Member") then
+			is_bid_MSbimbo_eligible = true
+			reason = "your 20 DKP MS bid was taken in. You have a total of " .. DKP .. " DKP."
+		elseif DKP < 20 and string.lower(bidding_round) == "!os" then
+			is_bid_OSbimbo_eligible = true
+			reason = "your 20 DKP OS bid was taken in. You have a total of " .. DKP .. " DKP."
+		elseif string.lower(bidding_round) == "!ms" and playerName_rank ~= "Officer" and playerName_rank ~= "Guardian" and playerName_rank ~= "Member" then
+			reason = "alts & trials are only allowed to bid via !OS."
 		elseif DKP < new_bid then
-			reason = "insufficient DKP."
+			reason = "insufficient DKP, you have a total of " .. DKP .. " DKP."
+		else reason = "well, this is an error and I frankly have no idea what kind of. Ask in Discord for help I suppose..."
 		end
-	else reason = "your guild status is too low."
 	end
-	print(new_bid)
-	return is_bid_eligible, is_bid_bimbo_eligible, reason, new_bid
+	return is_bid_MSeligible, is_bid_OSeligible, is_bid_MSbimbo_eligible, is_bid_OSbimbo_eligible, reason
 end
 
 function ChangeGuildStatus(playerName, new_status)
 	rosterDetails[playerName]["guild_status"] = new_status
 end
+
+function IsInList(list, playerName)
+	local is_in_list = false
+	for i = 1, #list do
+		if list[i] == playerName then
+			is_in_list = true
+			break
+		end
+	end
+	return is_in_list
+end
+

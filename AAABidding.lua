@@ -1,11 +1,11 @@
 local bidding_item_list = {}
-local highest_bid = 10
-local highest_bidder = {}
-local bidders = {}
+local MSbidders = {}
+local OSbidders = {}
+local MSfreeloaders = {}
+local OSfreeloaders = {}
 local bidders_bids = {}
-local freeloaders = {}
-local MSbidding_has_started = false
-local OSbidding_has_started = false
+local all_bidders = {}
+local bidders_priority = {}
 local bidding_sequence_has_started = false
 local bidding_on_hold = false
 local BiddingTimerTimeLeft = nil
@@ -14,9 +14,15 @@ local BiddingTimerTimeEnded = nil
 local bidding_item_list_backup = {}
 
 function BiddingSequenceCanceled(action)
+	MSbidders = {}
+	OSbidders = {}
+	MSfreeloaders = {}
+	OSfreeloaders = {}
+	all_bidders = {}
+	bidders_priority = {}
+	bidders_bids = {}
+	UpdateBiddingControlBidders(all_bidders, bidders_bids, bidders_priority)
 	bidding_sequence_has_started = false
-	MSbidding_has_started = false
-	OSbidding_has_started = false
 	bidding_item_list = {}
 	EndTimers()
 	if action ~= nil then 
@@ -45,8 +51,9 @@ StaticPopupDialogs["ACCEPT_DKP_CHANGES"] = {
     end,
     OnAccept = function(self)
         local winner, bid, reason = unpack(self.data)
-        SendChatMessage("Congrats to " .. winner .. " for purchasing " .. reason .. " for " .. bid .. "DKP.", "RAID")
         AdjustPersonDKP(winner, bid * -1, reason)
+        PrintBidders(MSbidders, OSbidders, MSfreeloaders, OSfreeloaders, bidders_bids)
+        SendChatMessage("Congrats to " .. winner .. " for " .. bidders_priority[winner] .. " purchasing " .. reason .. " for " .. bid .. "DKP.", "RAID")
         ContinueBiddingSequence()
     end,
     OnCancel = function()
@@ -55,46 +62,30 @@ StaticPopupDialogs["ACCEPT_DKP_CHANGES"] = {
 }
 
 function BiddingTimerHasEnded()
-	bidding_on_hold = true
-	if highest_bidder[1] == nil and OSbidding_has_started == true and freeloaders[1] == nil then 
-		SendChatMessage("Bidding has ended, " .. bidding_item_list[1] .. " will be disenchanted.", "RAID")
-		BiddingSequence()
-	elseif highest_bidder[1] == nil and MSbidding_has_started == true and freeloaders[1] == nil then 
-		BiddingSequence()
-	elseif #highest_bidder > 1 then
-		SendChatMessage("Bidding has ended! Rolling out for the highest bidders.", "RAID")
-		local highest_value = 0
-		local highest_bidder_roll = {}
-		local winner = ""
-		for i = 1, #highest_bidder do
-			highest_bidder_roll[i] = math.random(1, 100)
-			SendChatMessage(highest_bidder[i] .. " rolls for " .. highest_bidder_roll[i], "RAID")
-			if highest_bidder_roll[i] > highest_value then
-				highest_value = highest_bidder_roll[i]
-				winner = highest_bidder[i]
+	if bidding_sequence_has_started == true then
+		bidding_on_hold = true
+		local highest_bidder, highest_bid = CalculateWinner(MSbidders, OSbidders, MSfreeloaders, OSfreeloaders, bidders_bids)
+		if highest_bidder[1] == nil then 
+			SendChatMessage("Bidding has ended, " .. bidding_item_list[1] .. " will be disenchanted.", "RAID")
+			ContinueBiddingSequence()
+		elseif #highest_bidder > 1 then
+			SendChatMessage("Bidding has ended! Rolling out for the highest bidders.", "RAID")
+			local highest_value = 0
+			local highest_bidder_roll = {}
+			local winner = ""
+			for i = 1, #highest_bidder do
+				highest_bidder_roll[i] = math.random(1, 100)
+				SendChatMessage(highest_bidder[i] .. " rolls for " .. highest_bidder_roll[i], "RAID")
+				if highest_bidder_roll[i] > highest_value then
+					highest_value = highest_bidder_roll[i]
+					winner = highest_bidder[i]
+				end
 			end
+			SendChatMessage("Winner is - " .. winner, "RAID")
+			AcceptDKPChanges(winner, highest_bid, bidding_item_list[1])
+		elseif highest_bidder[1] ~=nil and highest_bidder[2] == nil then
+			AcceptDKPChanges(highest_bidder[1], highest_bid, bidding_item_list[1])
 		end
-		SendChatMessage("Winner is - " .. winner, "RAID")
-		AcceptDKPChanges(winner, highest_bid, bidding_item_list[1])
-	elseif highest_bidder[1] ~=nil and highest_bidder[2] == nil then
-		AcceptDKPChanges(highest_bidder[1], highest_bid, bidding_item_list[1])
-	elseif freeloaders[1] ~= nil and freeloaders[2] == nil then
-		AcceptDKPChanges(freeloaders[1], 20, bidding_item_list[1])	
-	elseif freeloaders[1] ~= nil and freeloaders[2] ~= nil then
-		SendChatMessage("Bidding has ended! Freeloaders rejoice, it's yours!", "RAID")
-		local highest_value = 0
-		local highest_bidder_roll = {}
-		local winner = ""
-		for i = 1, #freeloaders do
-			highest_bidder_roll[i] = math.random(1, 100)
-			SendChatMessage(freeloaders[i] .. " rolls for " .. highest_bidder_roll[i], "RAID")
-			if highest_bidder_roll[i] > highest_value then
-				highest_value = highest_bidder_roll[i]
-				winner = freeloaders[i]
-			end
-		end
-		SendChatMessage("Winner is - " .. winner, "RAID")
-		AcceptDKPChanges(winner, 20, bidding_item_list[1])
 	end
 end
 
@@ -108,83 +99,56 @@ function ReceiveWhisper(self, event, text, playerName)
 			keywords[j] = words
 			j = j + 1	
 		end
-		
 		if string.lower(keywords[1]) == "!dkp" then ReplyDKP(playerName, rosterDetails)
-		elseif (string.lower(keywords[1]) == "!dkp" or string.lower(keywords[1]) == "!bid") and keywords[3] ~= nil 
+		elseif (string.lower(keywords[1]) == "!ms" or string.lower(keywords[1]) == "!os" or string.lower(keywords[1]) == "!bid") and keywords[3] ~= nil 
 		and bidding_on_hold == false and bidding_sequence_has_started == true then
-			ReplyError(playerName, "maybe typos?")		
-		elseif string.lower(keywords[1]) == "!bid" and type(tonumber(keywords[2])) == "number" and keywords[3] == nil
+			ReplyError(playerName, "you made a typo. The syntax is '!ms X' or 'os X', where X is the amount you want to bid.")		
+		elseif (string.lower(keywords[1]) == "!ms" or string.lower(keywords[1]) == "!os") and type(tonumber(keywords[2])) == "number" and keywords[3] == nil
 		and bidding_on_hold == false and bidding_sequence_has_started == true then
-			keywords[2] = tonumber(keywords[2]) 
-			local is_bid_eligible, is_bid_bimbo_eligible, reason, new_bid = IsBidEligible(playerName, keywords[2], highest_bidder, highest_bid, bidding_on_hold, MSbidding_has_started, OSbidding_has_started)
-			if is_bid_eligible == true then
-				bidders, bidders_bids = UpdateCurrentBidders(playerName, new_bid, bidders, bidders_bids)
-				highest_bidder, highest_bid = CalculateHighestBidder(bidders, bidders_bids, highest_bid)
-				AnnounceBid(highest_bid, highest_bidder)
-			-- cia yra nonsense
-			elseif is_bid_bimbo_eligible == true then
-				freeloaders = UpdateCurrentBidders(playerName, 20, freeloaders, bidders_bids)
-				AnnounceBidBimbo(20, freeloaders)
+			keywords[2] = tonumber(keywords[2])
+			local playerName_DKP = GetDKP(playerName)
+			if keywords[2] > playerName_DKP and keywords[2] > 20 then keywords[2] = playerName_DKP end
+			local is_MSbid_eligible, is_OSbid_eligible, is_bid_MSbimbo_eligible, is_bid_OSbimbo_eligible, reason = IsBidEligible(playerName, keywords[1], keywords[2], bidding_on_hold)
+			if is_MSbid_eligible == true or is_OSbid_eligible == true or is_bid_MSbimbo_eligible == true or is_bid_OSbimbo_eligible == true then
+				MSbidders, OSbidders, MSfreeloaders, OSfreeloaders, bidders_bids, all_bidders, bidders_priority = UpdateCurrentBidders(playerName, keywords[2], is_MSbid_eligible, is_OSbid_eligible, is_bid_MSbimbo_eligible, is_bid_OSbimbo_eligible, MSbidders, OSbidders, MSfreeloaders, OSfreeloaders, bidders_bids, all_bidders, bidders_priority)
+				ReplyError(playerName, reason)
+				UpdateBiddingControlBidders(all_bidders, bidders_bids, bidders_priority)
 			else ReplyError(playerName, reason)
 			end
 		end
 	end
 end
 
-function UndoLastBid()
-	if bidders[1] ~= nil then 
-		bidders[#bidders] = nil
-	elseif freeloaders[1] ~= nil then
-		freeloaders[#freeloaders] = nil
+function UpdateCurrentBidders(playerName, playerName_bid, MSbid_eligible, OSbid_eligible, bid_MSbimbo_eligible, bid_OSbimbo_eligible, MSlist, OSlist, MSFlist, OSFlist, bids_list, bidders_list, priority)
+	RemoveBidder(playerName)
+	local is_in_MS_list = IsInList(MSbidders, playerName)
+	local is_in_OS_list = IsInList(OSbidders, playerName)
+	local is_in_MSfreeloaders_list = IsInList(MSfreeloaders, playerName)
+	local is_in_OSfreeloaders_list = IsInList(OSfreeloaders, playerName)
+	if MSbid_eligible == true and is_in_MS_list == false then
+		MSlist[#MSlist + 1] = playerName
+		bidders_list[#bidders_list + 1] = playerName
+		priority[playerName] = "MS"
+	elseif OSbid_eligible == true and is_in_OS_list == false then
+		OSlist[#OSlist + 1] = playerName
+		bidders_list[#bidders_list + 1] = playerName
+		priority[playerName] = "OS"
+	elseif bid_MSbimbo_eligible == true and is_in_MSfreeloaders_list == false then
+		MSFlist[#MSFlist + 1] = playerName
+		bidders_list[#bidders_list + 1] = playerName
+		priority[playerName] = "MS bimbo"
+	elseif bid_OSbimbo_eligible == true and is_in_OSfreeloaders_list == false then
+		OSfreeloaders[#OSfreeloaders + 1] = playerName
+		bidders_list[#bidders_list + 1] = playerName
+		priority[playerName] = "OS bimbo"
 	end
-	if bidders[1] ~= nil then
-		highest_bidder, highest_bid = CalculateHighestBidder(bidders, bidders_bids, highest_bid)
-		AnnounceBid(highest_bid, highest_bidder)
-		RefreshTimers()
-	elseif freeloaders[1] ~= nil then
-		highest_bid = 10
-		highest_bidder, highest_bid = CalculateHighestBidder(bidders, bidders_bids, highest_bid)
-		AnnounceBidBimbo(20, freeloaders)
-		RefreshTimers()
-	else
-		highest_bid = 10
-		highest_bidder, highest_bid = CalculateHighestBidder(bidders, bidders_bids, highest_bid)
-		SendChatMessage("---- NO BIDDERS -----", "RAID")
-		RefreshTimers()
-	end
-end
-
-
-function MSBidding(item)
-	highest_bid = 10
-	bidders = {}
-	bidders_bids = {}
-	highest_bidder = {}
-	freeloaders = {}
-	MSbidding_has_started = true
-	OSbidding_has_started = false
-	SendChatMessage("-------------------", "RAID")
-	SendChatMessage("MS bidding - MEMBERS ONLY for " .. item .. ". Whisper me !bid X.", "RAID_WARNING")
-	StartTimers()
-end
-
-function OSBidding(item)
-	highest_bid = 10
-	bidders = {}
-	bidders_bids = {}
-	highest_bidder = {}
-	freeloaders = {}
-	MSbidding_has_started = false
-	OSbidding_has_started = true
-	SendChatMessage("Bidding has ended, " .. item .. " goes to OS next.", "RAID")
-	SendChatMessage("OS bidding - trials & alts go nuts for " .. item .. ". Whisper me !bid X.", "RAID_WARNING")
-	StartTimers()
+	if playerName_bid < 20 then playerName_bid = 20 end
+	bids_list[playerName] = playerName_bid
+	return MSlist, OSlist, MSFlist, OSFlist, bids_list, bidders_list, priority
 end
 
 function ContinueBiddingSequence()
 	table.remove(bidding_item_list, 1)
-	MSbidding_has_started = false
-	OSbidding_has_started = false
 	BiddingSequence()
 end
 
@@ -194,19 +158,45 @@ function ResetBidding()
 	for i = 1, #bidding_item_list_backup do
 		bidding_item_list[i] = bidding_item_list_backup[i]
 	end
-	MSBidding(bidding_item_list[1])
+	BiddingSequence()
 end
 
 function BiddingSequenceSpecificItem(index)
-	BiddingSequenceCanceled("been canceled.")
+	if bidding_sequence_has_started == true then 
+		BiddingSequenceCanceled("been canceled.")
+	end
 	bidding_on_hold = false
 	bidding_sequence_has_started = true
 	bidding_item_list[1] = bidding_item_list_backup[index]
-	MSBidding(bidding_item_list[1])
+	BiddingSingleItem(bidding_item_list[1])
+end
+
+function BiddingSingleItem(item)
+	MSbidders = {}
+	OSbidders = {}
+	MSfreeloaders = {}
+	OSfreeloaders = {}
+	all_bidders = {}
+	bidders_priority = {}
+	bidders_bids = {}
+	UpdateBiddingControlCurrentItem(item)
+	UpdateBiddingControlAllItems(bidding_item_list_backup)
+	UpdateBiddingControlBidders(all_bidders, bidders_bids, bidders_priority)
+	SendChatMessage("-------------------", "RAID")
+	SendChatMessage("Bid for " .. item .. ". Whisper me '!ms X' or '!os X' where X is the amount you want to bid.", "RAID_WARNING")
+	StartTimers()
 end
 
 function BiddingSequence(message)
 	bidding_on_hold = false
+	highest_bid = 20
+	MSbidders = {}
+	OSbidders = {}
+	MSfreeloaders = {}
+	OSfreeloaders = {}
+	all_bidders = {}
+	bidders_priority = {}
+	bidders_bids = {}	
 	--pirmakart ateina cia
 	if bidding_sequence_has_started == false then 
 		bidding_item_list = {}
@@ -216,26 +206,24 @@ function BiddingSequence(message)
 			table.insert(bidding_item_list, word)
 			table.insert(bidding_item_list_backup, word)
 		end
+		CreateBiddingControlBidders(MSbidders, OSbidders, MSfreeloaders, OSfreeloaders, bidders_bids, all_bidders)
+		UpdateBiddingControlCurrentItem(bidding_item_list[1])
 		UpdateBiddingControlAllItems(bidding_item_list_backup)
-	end
-	-- OS, nes buvo MS
-	if MSbidding_has_started == true then
-		OSBidding(bidding_item_list[1])	
-	-- MS, nes buvo OS	
-	elseif OSbidding_has_started == true then
-		table.remove(bidding_item_list, 1)
+		UpdateBiddingControlBidders(all_bidders, bidders_bids, bidders_priority)
+		SendChatMessage("-------------------", "RAID")
+		SendChatMessage("Bid for " .. bidding_item_list[1] .. ". Whisper me '!ms X' or '!os X' where X is the amount you want to bid.", "RAID_WARNING")
+		StartTimers()
+	else 
 		if bidding_item_list[1] ~= nil then
 			UpdateBiddingControlCurrentItem(bidding_item_list[1])
-			MSBidding(bidding_item_list[1])
+			UpdateBiddingControlBidders(all_bidders, bidders_bids, bidders_priority)
+			SendChatMessage("-------------------", "RAID")
+			SendChatMessage("Bid for " .. bidding_item_list[1] .. ". Whisper me '!ms X' or '!os X' where X is the amount you want to bid.", "RAID_WARNING")
+			StartTimers()
 		elseif bidding_item_list[1] == nil then
-		BiddingSequenceCanceled("ended.")
+			UpdateBiddingControlBidders(all_bidders, bidders_bids, bidders_priority)
+			BiddingSequenceCanceled("ended.")
 		end
-	-- MS, nes nebuvo nieko
-	elseif bidding_item_list[1] ~= nil then
-		UpdateBiddingControlCurrentItem(bidding_item_list[1])
-		MSBidding(bidding_item_list[1])
-	elseif bidding_item_list[1] == nil then
-		BiddingSequenceCanceled("ended.")
 	end
 end
 
@@ -247,8 +235,8 @@ function RefreshTimers()
 end
 
 function StartTimers()
-	BiddingTimerTimeLeft = C_Timer.NewTimer(15, BiddingTimerIsLeft)
-	BiddingTimerTimeEnded = C_Timer.NewTimer(20, BiddingTimerHasEnded)
+	BiddingTimerTimeLeft = C_Timer.NewTimer(25, BiddingTimerIsLeft)
+	BiddingTimerTimeEnded = C_Timer.NewTimer(30, BiddingTimerHasEnded)
 end
 
 function EndTimers()
@@ -260,16 +248,46 @@ local ChatCommandsFrame=CreateFrame("frame");
 ChatCommandsFrame:RegisterEvent("CHAT_MSG_WHISPER");
 ChatCommandsFrame:HookScript("OnEvent", ReceiveWhisper)
 
-
-
-function TestFunction()
-	if bidders[1] ~= nil then
-		for i = 1, #bidders do
-			print(bidders[i])
+function RemoveBidder(playerName)
+	for i = 1, #all_bidders do
+		if all_bidders[i] == playerName then
+			bidders_bids[all_bidders[i]] = nil
+			table.remove(all_bidders, i)
+			break
 		end
 	end
+	for i = 1, #MSbidders do
+		if MSbidders[i] == playerName then
+			table.remove(MSbidders, i)
+			break
+		end
+	end
+	for i = 1, #OSbidders do
+		if OSbidders[i] == playerName then
+			table.remove(OSbidders, i)
+			break
+		end
+	end
+	for i = 1, #MSfreeloaders do
+		if MSfreeloaders[i] == playerName then
+			table.remove(MSfreeloaders, i)
+			break
+		end
+	end
+	for i = 1, #OSfreeloaders do
+		if OSfreeloaders[i] == playerName then
+			table.remove(OSfreeloaders, i)
+			break
+		end
+	end
+	UpdateBiddingControlBidders(all_bidders, bidders_bids, bidders_priority)		
 end
 
-
+function TestFunction()
+	print(MSbidders[1])
+	print(OSbidders[1])
+	print(MSfreeloaders[1])
+	print(OSfreeloaders[1])
+end
 
 
